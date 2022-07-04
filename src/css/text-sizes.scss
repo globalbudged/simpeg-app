@@ -1,0 +1,140 @@
+// default text-sizes
+$text-sizes:10, 12, 14, 16, 18, 21, 24;
+
+//  text size optioms & multipiers
+
+// $text-size-options: (
+//     'sm':0.8,
+//     'md':1,
+//     'lg':1.2,
+//     'xl':1.4,
+// );
+
+
+$text-size-options: (
+    'sm':10,
+    'md':12,
+    'lg':16,
+    'xl':18,
+);
+
+// variable text size classes
+@each $key, $value in $text-size-options {
+    [data-text-size="#{$key}"] {
+        font-size: #{$value}px;
+        .q-field {
+            font-size:#{$value}px;
+        }
+        .q-field--dense {
+            .q-field__control, .q-field__marginal {
+                height: #{$value * 3}px;
+            }
+            .q-field__label {
+                font-size: #{$value}px;
+                top:#{$value - 4}px;
+            }
+        }
+        .q-field--labeled.q-field--dense .q-field__native{
+            padding-top: 10px ;
+            padding-bottom: 2px ;
+            font-size: #{$value}px;
+        }
+
+        // class search
+        .q-field.search-big {
+            font-size:#{$value + 2}px;
+        }
+        .q-field--dense {
+            .q-field__control, .q-field__marginal {
+                height: #{$value * 3}px;
+            }
+            .q-field__label {
+                font-size: #{$value}px;
+                top:#{$value - 4}px;
+            }
+        }
+
+        .q-field--auto-height.q-field--dense.q-field--labeled .q-field__control-container {
+            padding-top: 1px;
+        }
+        .q-field--auto-height.q-field--dense .q-field__control, .q-field--auto-height.q-field--dense .q-field__native {
+            min-height: 36px;
+        }
+    }  
+
+}
+
+@each $text-size in $text-sizes {
+    .f-#{$text-size} {
+        font-size: #{$text-size}px;
+        line-height: #{$text-size + 2}px;
+    }
+}
+
+
+// variable text size classes
+// @each $text-size, $multiplier in $text-size-options {
+//     [data-text-size="#{$text-size}"] {
+//         @each $text-size in $text-sizes {
+//             .text-size-#{$text-size} {
+//                 font-size: #{$text-size * $multiplier}px;
+
+//                 // for q-input
+//                 &.q-field--dense {
+//                     .q-field__control, .q-field__marginal {
+//                         height: 46px * $multiplier;
+//                     }
+//                     .q-field__label {
+//                         top: (46px * $multiplier) / 4;
+//                         font-size: 16px * $multiplier;
+//                         line-height: 23px * $multiplier;
+//                     }
+//                 }
+//                 &.q-field--labeled {
+//                     .q-field__native {
+//                         line-height: 24px * $multiplier;
+//                     }
+                    
+//                 }
+
+//                 // for q-select
+//                 &.q-select {
+//                     .q-field__marginal {
+//                         height: 56px * $multiplier;
+//                     }
+//                     .q-field__label {
+//                         top: 18px * $multiplier;
+//                         font-size: 16px * $multiplier;
+//                         line-height: 23px * $multiplier;
+//                     }
+//                     &.q-field--auto-height.q-field--labeled .q-field__control-container {
+//                         padding-top: 24px * $multiplier;
+//                     }
+//                 }
+
+//                 // q-tab
+//                 &.q-tab {
+//                     .q-tab__icon {
+//                         width: 24px * $multiplier;
+//                         height: 24px * $multiplier;
+//                         font-size: 24px * $multiplier;
+//                     }
+//                     .q-tab__label {
+//                         font-size: #{$text-size * $multiplier}px;
+//                     }
+//                 }
+
+//                 // q-item
+//                 // &.q-item {
+//                 //     .q-item__label {
+//                 //         line-height: 23px * $multiplier !important;
+//                 //     }
+//                 // }
+
+                
+
+
+//             }
+//         }
+//     }
+// }

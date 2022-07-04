@@ -1,0 +1,121 @@
+
+
+[data-theme="default"] {
+  background-color: $grey-2;
+
+  .active {
+    background: $primary !important;
+  }
+
+
+  .adm {
+    &-toolbar {
+      background-color: $primary;
+      color: #fff;
+    }
+
+    &-header{
+      background-color: #fff;   
+      color:rgb(29, 29, 29);
+      height: 50px; 
+      z-index: 6001;
+      &__toolbar{
+        height: 50px;
+      }
+      .btn--header {
+        min-width:50px;
+        height: 50px;
+        cursor: pointer;
+        font-size: 24px;
+        // border: 1px solid rgba(238, 238, 238, 0.623);
+        &:hover {
+          background-color: rgb(247 247 247);
+        }
+      }
+    }
+
+
+
+    // drawer
+    &-drawer {
+
+      &__right {
+        background-color: $grey-3;
+        z-index: 7000 !important;
+      }
+
+      &__left {
+        background: #283144;
+        color:#fff;
+      }
+      &__header {
+        padding: 10px;
+        background: #212939;
+      }
+      &__logo {
+        background: #212939;
+      }
+      &__list {
+        ._list-header {
+          padding: 10px 16px;
+          color: rgba(255, 255, 255, 0.589);
+          letter-spacing: .08em;
+          font-size: 12px;
+          font-weight: 500;
+          line-height: 12px;
+        }
+      }
+      &__item {
+        line-height: 18px;
+        border-radius: 0 24px 24px 0;
+        margin-right: 12px;
+        min-height: 32px;
+
+        .q-item__section--avatar{
+          min-width: 30px !important;
+          .q-icon{
+            font-size: 18px;
+            color:#fff;
+          }
+        }
+        .q-item__label  {
+          color: #fff;
+          letter-spacing: .01785714em;
+          font-size: 12px;
+          font-weight: 300;
+          line-height: 14px;
+        }
+        
+      }
+      
+    }  
+  }
+
+  // menu active
+  .q-item.q-router-link--exact-active {
+    background-color: rgba($primary , 0.7);
+  }
+
+  .card-page,.card-dialog {
+    border-radius: 5px;
+    background-color: #fff;
+    color:#283144 !important;
+  }
+  .app-table {
+    .title-table{
+      border-right: 1px solid rgba($primary , 0.7);
+    }
+  }
+  .bg-loading-bg__table{
+    background-color: $grey-3;
+  }
+  
+}
+
+.q-drawer--on-top {
+  z-index: 6002 !important;
+}
+
+.fullscreen {
+  z-index: 6000;
+}

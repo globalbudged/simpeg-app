@@ -1,0 +1,42 @@
+// app global css in SCSS form
+@import './text-sizes.scss';
+@import './themes.scss';
+.mt--5 {
+    margin-top: -5px;
+}
+
+.q-field__bottom {
+    font-size: 10px;
+    min-height: 15px !important;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.54);
+    padding: 3px 10px 0 !important;
+}
+.q-field__message-col>div {
+    font-size:10px !important;
+}
+
+.q-item {
+    min-height: 25px;
+    font-size: 12px;
+    line-height: 12px;
+    .q-item__section--avatar {
+        color: inherit;
+        min-width: 20px;
+    }
+    .q-item__section--side {
+        padding-right: 10px;
+    }
+}
+
+.q-date--portrait-standard .q-date__header {
+    height: 75px;
+}
+.q-date__view {
+    min-height: 266px;
+    padding: 8px;
+}
+
+
+
+
