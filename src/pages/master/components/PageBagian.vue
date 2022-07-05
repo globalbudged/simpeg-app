@@ -1,25 +1,25 @@
 <template>
     <div>
         <temp-page-panel
-            :loading="jurusan.loading"
-            :loading-more="jurusan.loadingMore"
-            :items="jurusan.items"
-            :mores="jurusan.mores"
-            :meta="jurusan.meta"
-            :sort="jurusan.params.sort"
-            title="Master Jurusan"
-            title-list="List Jurusan"
-            caption="Masukkan Jurusan Pegawai"
-            @sort="jurusan.sortOrder"
-            @get-more="jurusan.setMorePage"
+            :loading="bagian.loading"
+            :loading-more="bagian.loadingMore"
+            :items="bagian.items"
+            :mores="bagian.mores"
+            :meta="bagian.meta"
+            :sort="bagian.params.sort"
+            title="Master Bagian"
+            title-list="List Bagian"
+            caption="Masukkan Data Bagian Pegawai"
+            @sort="bagian.sortOrder"
+            @get-more="bagian.setMorePage"
             @submit="formData.saveForm"
             @delete="deleteData"
             @edit="formData.editData"
             @reset="formData.newData"
         >
             <template v-slot:form>
-                <app-input :autofocus="false" v-model="formData.form.nama" label="Jurusan, , (contoh: INFORMATIKA)" class="q-mb-sm"/>
-                <app-input valid v-model="formData.form.profesi" label="Profesi (Optional)" class="q-mb-sm"/>
+                <app-input :autofocus="false" v-model="formData.form.nama" label="Nama Bagian , contoh: KEUANGAN" class="q-mb-sm"/>
+                <app-input valid v-model="formData.form.keterangan" label="Keterangan... (Optional)" class="q-mb-sm"/>
             </template>
             <template v-slot:letter-icon="{row}">
               <div class="text-capitalize">{{row.nama.slice(0,1)}}</div>
@@ -28,7 +28,7 @@
               {{row.nama}}
             </template>
             <template v-slot:caption-nama="{row}">
-              {{row.profesi}}
+              {{row.keterangan}}
             </template>
         </temp-page-panel>
     </div>
@@ -38,17 +38,17 @@
 import TempPagePanel from './TempPagePanel.vue'
 // import ======================================
 import { onMounted } from 'vue'
-import { useFormStore } from 'src/stores/master/jurusan/form'
-import { useJurusanStore } from 'src/stores/master/jurusan/index'
+import { useFormStore } from 'src/stores/master/bagian/form'
+import { useBagianStore } from 'src/stores/master/bagian/index'
 import { useQuasar } from 'quasar'
 
 // const ======================================
 const $q = useQuasar()
 const formData = useFormStore()
-const jurusan = useJurusanStore()
+const bagian = useBagianStore()
 
 onMounted(() => {
-  jurusan.getDataTable()
+  bagian.getDataTable()
   formData.resetFORM()
 })
 
@@ -58,7 +58,7 @@ function deleteData (id) {
     message: 'Apakah Data ini akan dihapus?',
     cancel: true
   }).onOk(() => {
-    jurusan.deletesData(id)
+    bagian.deletesData(id)
   }).onCancel(() => {
     console.log('Cancel')
   }).onDismiss(() => {

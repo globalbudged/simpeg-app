@@ -18,7 +18,7 @@
             @reset="formData.newData"
         >
             <template v-slot:form>
-                <app-input :autofocus="false" v-model="formData.form.nama" label="Jenis Kelompok Medis" class="q-mb-sm"/>
+                <app-input :autofocus="false" v-model="formData.form.nama" label="Kelompok Medis, , (contoh: NON MEDIS)" class="q-mb-sm"/>
                 <app-input valid v-model="formData.form.flag" label="Masukkan flag (Optional)" />
             </template>
             <template v-slot:letter-icon="{row}">

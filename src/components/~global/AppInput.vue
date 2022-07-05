@@ -2,7 +2,7 @@
     <q-input
       ref="refInput"
       dense
-      :filled="filled"
+      :filled="!outlined?filled:!filled"
       :outlined="outlined"
       :label="label"
       :hide-bottom-space="true"

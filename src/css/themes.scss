@@ -3,6 +3,13 @@
 [data-theme="default"] {
   background-color: $grey-2;
 
+  .bg-page {
+    background-color: $grey-2;
+  }
+  .bg-page-secondary {
+    background-color: #fff;
+  }
+
   .active {
     background: $primary !important;
   }

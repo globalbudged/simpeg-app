@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf" class="text-size-12" :data-theme="theme">
 
-    <AppBeforeMount v-show="wait" />
+    <!-- <AppBeforeMount v-show="wait" /> -->
     <AdmHeader
       @open-left="menuLeft = !menuLeft"
       @open-right="menuRight = !menuRight"
@@ -10,7 +10,7 @@
     <AdmDrawerRight v-model="menuRight" />
 
     <q-page-container>
-        <router-view v-slot="{ Component }">
+        <!-- <router-view v-slot="{ Component }">
           <transition
             appear
             enter-active-class="animated slide-left"
@@ -18,7 +18,8 @@
           >
             <component :is="Component" />
           </transition>
-        </router-view>
+        </router-view> -->
+        <router-view />
     </q-page-container>
   </q-layout>
 </template>

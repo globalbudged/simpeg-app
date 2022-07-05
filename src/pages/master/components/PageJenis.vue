@@ -18,8 +18,8 @@
             @reset="formData.newData"
         >
             <template v-slot:form>
-                <app-input :autofocus="false" v-model="formData.form.nama" label="Jenis Kepegawaian" class="q-mb-sm"/>
-                <app-input valid v-model="formData.form.kelompok" label="Kelompok Kepegawaian" class="q-mb-sm"/>
+                <app-input :autofocus="false" v-model="formData.form.nama" label="Jenis Kepegawaian, (contoh: PNS)" class="q-mb-sm"/>
+                <app-input valid v-model="formData.form.kelompok" label="Kelompok , (contoh: ASN)" class="q-mb-sm"/>
             </template>
             <template v-slot:letter-icon="{row}">
               <div class="text-capitalize">{{row.nama.slice(0,1)}}</div>

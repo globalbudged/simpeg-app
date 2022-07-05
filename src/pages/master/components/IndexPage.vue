@@ -66,6 +66,10 @@ import PagePendidikan from 'src/pages/master/components/PagePendidikan.vue'
 import PageJenis from 'src/pages/master/components/PageJenis.vue'
 import PageKelompokMedis from 'src/pages/master/components/PageKelompokMedis.vue'
 import PageJurusan from 'src/pages/master/components/PageJurusan.vue'
+import PageBagian from 'src/pages/master/components/PageBagian.vue'
+import PageJabatan from 'src/pages/master/components/PageJabatan.vue'
+import PageGolongan from 'src/pages/master/components/PageGolongan.vue'
+import PageRuangan from 'src/pages/master/components/PageRuangan.vue'
 
 const store = useMasterStore()
 
@@ -75,10 +79,10 @@ const tabs = shallowRef([
   { name: 'Jenis Kepegawaian', icon: 'assignment', comp: PageJenis },
   { name: 'Kelompok Medis', icon: 'analytics', comp: PageKelompokMedis },
   { name: 'Jurusan', icon: 'interests', comp: PageJurusan },
-  { name: 'Bagian', icon: 'assignment_turned_in' },
-  { name: 'Jenis Jabatan', icon: 'extension' },
-  { name: 'Golongan', icon: 'loyalty' },
-  { name: 'Ruangan', icon: 'space_dashboard' },
+  { name: 'Bagian', icon: 'assignment_turned_in', comp: PageBagian },
+  { name: 'Jenis Jabatan', icon: 'extension', comp: PageJabatan },
+  { name: 'Golongan', icon: 'loyalty', comp: PageGolongan },
+  { name: 'Ruangan', icon: 'space_dashboard', comp: PageRuangan },
   { name: 'Jadwal Kerja', icon: 'sticky_note_2' },
   { name: 'Shift', icon: 'swap_horiz' },
   { name: 'Satker Luar', icon: 'rule' },

@@ -1,8 +1,8 @@
 <template>
     <q-input
       ref="refInputDate"
-      dense
-      :filled="filled"
+      :dense="dense"
+      :filled="!outlined?filled:!filled"
       :outlined="outlined"
       :label="label"
       :hide-bottom-space="true"
@@ -82,6 +82,7 @@ const props = defineProps({
   },
   valid: { type: Boolean, default: false },
   autofocus: { type: Boolean, default: false },
+  dense: { type: Boolean, default: true },
   filled: { type: Boolean, default: true },
   outlined: { type: Boolean, default: false },
   disable: { type: Boolean, default: false },
@@ -113,7 +114,6 @@ function anotherValid (val) {
   if (props.valid) {
     return true
   }
-  refPopup.value.show()
   return (val !== null && val !== '') || 'Harap diisi'
 }
 
