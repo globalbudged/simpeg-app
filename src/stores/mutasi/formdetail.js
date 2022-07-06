@@ -1,22 +1,22 @@
 import { defineStore } from 'pinia'
-import { axios } from 'boot/axios'
+import { axios, api } from 'boot/axios'
 // import { routerInstance } from 'src/boot/router'
 // import { notifErr, notifSuccess } from 'src/modules/utils'
 // import { useAuthStore } from './auth'
 // import { Dialog } from 'quasar'
 
-export const useFormPegawaiStore = defineStore('formpegawai', {
+export const useFormDetailMutasiStore = defineStore('formdetail', {
   state: () => ({
     isOpen: false,
     form: {
       // data diri
-      nip: '',
-      nik: '',
-      nama: '',
+      nip: '46346',
+      nik: '4643643',
+      nama: 'gdfgfdgd',
       tempat_lahir: '',
       tanggal_lahir: '',
       agama: 'Islam',
-      gender: '',
+      gender: 'L',
       contact: '',
       // alamat asal
       alamat: '',
@@ -25,8 +25,11 @@ export const useFormPegawaiStore = defineStore('formpegawai', {
       kecamatan: '',
       kelurahan: '',
       kodepos: '',
-      // pendidikan
-      pendidikan: '',
+
+      // pendidikan dan kepegawaian
+      pendidikan_id: '',
+      kategori_id: '', // kelompok medis
+      jurusan_id: '',
       sekolah: '',
       tmt: '',
       // user login,
@@ -40,7 +43,13 @@ export const useFormPegawaiStore = defineStore('formpegawai', {
     kels: [],
     loadingSelect: false,
     loading: false,
-    edited: false
+    edited: false,
+
+    autocompletes: {
+      pendidikans: [],
+      kelompokMedis: []
+    },
+    jurusans: []
   }),
 
   getters: {
@@ -182,6 +191,31 @@ export const useFormPegawaiStore = defineStore('formpegawai', {
       // kecuali yang ada di object user
       this.setForm('email', val.user.email)
       this.isOpen = !this.isOpen
+    },
+
+    // ================================================================AUTOCOMPLETE
+    async getAutocomplete () {
+      await api.get('/autocomplete').then((resp) => {
+        console.log(resp)
+        const results = resp.data.result
+        this.autocompletes.pendidikans = results.pendidikans
+        this.autocompletes.kelompokMedis = results.kategoris
+      })
+        .catch(error => {
+          console.log(error)
+        })
+    },
+
+    async getJurusans (payload) {
+      const search = typeof payload !== 'undefined' || payload != null ? payload : ''
+      const params = {
+        params: {
+          q: search
+        }
+      }
+      await api.get('/autocomplete/jurusans', params).then(resp => {
+        console.log('jurusan', resp)
+      })
     }
 
   }

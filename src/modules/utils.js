@@ -41,6 +41,17 @@ const notifSuccess = (resp) => {
     ]
   })
 }
+const notifErrVue = (msg) => {
+  Notify.create({
+    message: msg,
+    icon: 'sms_failed',
+    position: 'bottom-right',
+    color: 'negative',
+    actions: [
+      { label: 'Dismiss', color: 'yellow', handler: () => { /* console.log('wooow') */ } }
+    ]
+  })
+}
 
 const waitLoad = (cond) => {
   if (cond === 'show') {
@@ -55,4 +66,4 @@ const waitLoad = (cond) => {
   }
 }
 
-export { notifSuccess, notifErr, waitLoad }
+export { notifSuccess, notifErr, notifErrVue, waitLoad }

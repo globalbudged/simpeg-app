@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
-// import { routerInstance } from 'src/boot/router'
+import { routerInstance } from 'src/boot/router'
 // import { notifErr } from 'src/modules/utils'
 // import { Dialog } from 'quasar'
 import { dbFormat } from 'src/modules/formatter'
@@ -51,10 +51,11 @@ export const useMutasiStore = defineStore('mutasi', {
     async saveData () {
       await api.post('/mutasi/adding_data', this.form)
         .then((resp) => {
-          console.log(resp)
-        // return new Promise((resolve, reject) => {
-        //   resolve(resp)
-        // })
+          // console.log(resp)
+          routerInstance.replace({ name: 'mutasi.masuk', params: { slug: resp.data.result.uuid } })
+          // return new Promise((resolve, reject) => {
+          //   resolve(resp)
+          // })
         }).catch(error => {
           console.log(error.response)
         // notifErr(error.response)

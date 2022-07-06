@@ -1,5 +1,5 @@
 <template>
-    <q-dialog position="right" class="app-dialog" >
+    <q-dialog :position="position" class="app-dialog" >
         <q-card style="min-width:350px; max-width: 90vw;">
             <q-card-section>
                 <div class="f-16 text-bold">Form Input</div>
@@ -25,7 +25,8 @@ import { ref, defineProps } from 'vue'
 defineEmits(['onSubmit'])
 
 defineProps({
-  loading: { type: Boolean, default: false }
+  loading: { type: Boolean, default: false },
+  position: { type: String, default: 'right' }
 })
 
 const refForm = ref(null)

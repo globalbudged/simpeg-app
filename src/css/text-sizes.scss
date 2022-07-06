@@ -22,6 +22,9 @@ $text-size-options: (
 @each $key, $value in $text-size-options {
     [data-text-size="#{$key}"] {
         font-size: #{$value}px;
+        .q-banner__content {
+            font-size: #{$value}px;
+          }
         .q-field {
             font-size:#{$value}px;
         }

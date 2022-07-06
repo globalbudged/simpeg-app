@@ -126,7 +126,7 @@
                     </td>
                     <td v-if="rowImage !== null" class="text-left">
                         <q-avatar size="30px">
-                            <img src="images/user-avatar.svg">
+                            <img src="~assets/images/user-avatar.svg">
                         </q-avatar>
                     </td>
                     <td v-for="( col, idx ) in filterColumn" :key="idx"  width="10%" class="text-left">

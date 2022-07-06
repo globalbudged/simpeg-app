@@ -2,7 +2,7 @@
     <div class="adm-drawer__header" >
         <div class="flex column flex-center">
         <q-avatar size="60px">
-            <img src="images/user-avatar.svg">
+            <img :src="imgSrc">
         </q-avatar>
         <div class="text-caption2 q-mt-sm">Nama User</div>
         <div class="f-10">Nama User</div>
@@ -28,7 +28,9 @@
 </template>
 
 <script setup>
-
+import { ref } from 'vue'
+// ~assets/images/user-avatar.svg ditaruh langsung di html
+const imgSrc = ref('/src/assets/images/user-avatar.svg')
 </script>
 
 <style lang="scss" scoped>

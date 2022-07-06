@@ -4,7 +4,8 @@
     :options="optionx"
     :label="label"
     dense
-    filled
+    :filled="!outlined?filled:!filled"
+    :outlined="outlined"
     hide-bottom-space
     no-error-icon
     @filter="filterFn"
@@ -23,6 +24,8 @@
     :loading="loading"
     lazy-rules
     :rules="[anotherValid]"
+    @new-value="createValue"
+    multiple
 >
     <template v-slot:no-option>
     <q-item>
@@ -36,7 +39,7 @@
 
 <script setup>
 import { ref } from 'vue'
-const emits = defineEmits(['getSource', 'setModel', 'change'])
+const emits = defineEmits(['getSource', 'setModel', 'change', 'create'])
 const props = defineProps({
   source: { type: Array, default: () => [] },
   label: { String: Array, default: 'Label' },
@@ -44,7 +47,8 @@ const props = defineProps({
   loading: { String: Boolean, default: false },
   optionValue: { String: Array, default: 'name' },
   optionLabel: { String: Array, default: 'name' },
-
+  filled: { type: Boolean, default: true },
+  outlined: { type: Boolean, default: false },
   valid: { type: Boolean, default: false }
 })
 const refAuto = ref(null)
@@ -82,6 +86,10 @@ function anotherValid (val) {
     return true
   }
   return (val !== null && val !== '') || 'Harap diisi'
+}
+
+function createValue (val, done) {
+  emits('create', val)
 }
 </script>
 

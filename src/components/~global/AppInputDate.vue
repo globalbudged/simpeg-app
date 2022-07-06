@@ -20,9 +20,9 @@
         @update:model-value="closeDate()"
     >
 
-      <!-- <template v-slot:prepend v-if="icon!==null">
+      <template v-slot:append v-if="icon!==null">
           <q-icon :name="icon" size="18px" />
-      </template> -->
+      </template>
       <template v-slot:prepend>
         <q-popup-proxy
             cover

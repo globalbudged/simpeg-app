@@ -55,7 +55,7 @@
           <div class="q-mx-sm f-14 text-bold">{{user? user.name: 'Administrator'}}
           </div>
           <q-avatar size="30px">
-            <img src="images/user-avatar.svg">
+            <img :src="imgSrc">
           </q-avatar>
         </div>
         <!-- tombol drawer kanan -->
@@ -68,12 +68,14 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useAuthStore } from 'src/stores/auth'
 const emits = defineEmits(['openLeft', 'openRight'])
 
 const storeAuth = useAuthStore()
 const user = computed(() => storeAuth.user)
+// ~assets/images/user-avatar.svg ditaruh langsung di html
+const imgSrc = ref('/src/assets/images/user-avatar.svg')
 
 </script>
 
