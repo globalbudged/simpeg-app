@@ -4,7 +4,6 @@
             <div class="col-md-7 col-xs-12">
                 <q-stepper
                     v-model="step"
-                    header-nav
                     ref="stepper"
                     color="primary"
                     animated
@@ -13,8 +12,9 @@
                         :name="1"
                         title="Data Diri"
                         icon="person"
+                        :done="step > 1"
                     >
-                        <q-form @submit="step=2">
+                        <q-form @submit="stepOneSubmit">
                             <div class="row q-col-gutter-md">
                                 <div class="col-md-12 f-14 text-bold">Data Diri</div>
                                 <div class="col-md-12 col-xs-12">
@@ -27,7 +27,7 @@
                                     <app-input v-model="formData.form.nip" icon="pin" label="Masukkan NIP / Kode Pegawai *" outlined/>
                                 </div>
                                 <div class="col-md-4 col-xs-12">
-                                    <app-input-date valid v-model="formData.form.tanggal_lahir"
+                                    <app-input-date valid :model="formData.form.tanggal_lahir"
                                     icon="event" label="Tanggal Lahir" @setModel="(val)=>formData.setForm('tanggal_lahir', val)"
                                     outlined/>
                                 </div>
@@ -93,7 +93,7 @@
                                     <app-input valid v-model="formData.form.kodepos" label="Kodepos" outlined />
                                 </div>
                             </div>
-                            <q-banner class="bg-page q-mt-md">
+                            <q-banner class="bg-alert__info q-mt-md">
                                 <strong>INFORMASI</strong> <br />
                                 <em>Informasi ini Bersifat penting, isi secara detail form diatas. Inputan yang bertanda <strong>*</strong> Wajib diisi untuk yang lainnya Optional</em>
                             </q-banner>
@@ -108,8 +108,9 @@
                         title="Keterangan Lainnya"
                         caption="Untuk Kelengkapan Data"
                         icon="create_new_folder"
+                        :done="step > 2"
                     >
-                        <q-form>
+                        <q-form @submit="formData.sendToList">
                             <div class="row q-col-gutter-md">
                                 <div class="col-md-12 f-14 text-bold">Data Pendidikan dan Kepegawaian</div>
 
@@ -157,32 +158,169 @@
                                 </div>
 
                                 <!-- PILIHAN JURUSAN - PROFESI -->
-                                <div class="col-md-5 col-xs-12">
+                                <div class="col-md-4 col-xs-12">
                                     Jurusan dan Profesi Pegawai
                                 </div>
-                                <div class="col-md-7 col-xs-12">
+                                <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-autocomplete valid outlined
+                                        <app-autocomplete-new valid outlined
+                                            style="width:90%"
                                             v-model="formData.form.jurusan_id"
                                             label="Jurusan - Profesi"
                                             :source="formData.jurusans"
-                                            @setModel="coba"
-                                            @create="create"
+                                            :option-label="(val)=> Object(val) === val && 'nama' in val ? `${val.nama} - ${val.profesi}`:null"
+                                            :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
+                                            autocomplete="nama-profesi"
+                                            @onEnter="formData.addJurusan"
+
                                         />
-                                        <q-btn size="sm" icon="add" flat round  @click="openKelMed = !openKelMed"/>
+                                        <q-icon size="25px" name="help_outline" color="info" class="cursor-pointer">
+                                            <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                                                <strong>Untuk Masukkan data ?</strong> <br />
+                                                <em>pisah dgn tanda ( - )</em><br />
+                                                <em>Jurusan dan Profesi</em><br />
+                                                <em>contoh</em><br />
+                                                <strong>INFORMATIKA-JARINGAN</strong><br />
+                                                <em>Lalu tekan Enter </em>
+                                            </q-tooltip>
+                                        </q-icon>
                                     </div>
                                 </div>
 
-                                <!-- <div class="col-md-1 col-xs-4">
-                                </div> -->
-                                <div class="col-md-12 col-xs-12">
-                                    <!-- {{openPendidikan}} -->
+                                <!-- Autocomplete Jabatan -->
+                                <div class="col-md-4 col-xs-12">
+                                    Pilih Data Jabatan
                                 </div>
-                            </div>
+                                <div class="col-md-8 col-xs-12">
+                                    <div class="flex items-center justify-between">
+                                        <app-autocomplete-new valid outlined
+                                            style="width:90%"
+                                            v-model="formData.form.jabatan_id"
+                                            label="Jabatan"
+                                            :source="formData.jabatans"
+                                            :option-label="(val)=> Object(val) === val && 'nama' in val ? `${val.nama}`:null"
+                                            :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
+                                            autocomplete="nama"
+                                            @onEnter="formData.addJabatan"
 
+                                        />
+                                        <q-icon size="25px" name="help_outline" color="info" class="cursor-pointer">
+                                            <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                                                <strong>Untuk Masukkan data ?</strong> <br />
+                                                <em>Jabatan</em><br />
+                                                <em>contoh : </em><br />
+                                                <strong>DIREKTUR</strong><br />
+                                                <em>Lalu tekan Enter </em>
+                                            </q-tooltip>
+                                        </q-icon>
+                                    </div>
+                                </div>
+                                <!-- Autocomplete Golongan -->
+                                <div class="col-md-4 col-xs-12">
+                                    Pilih Data Golongan / Untuk (PNS)
+                                </div>
+                                <div class="col-md-8 col-xs-12">
+                                    <div class="flex items-center justify-between">
+                                        <app-autocomplete-new valid outlined
+                                            style="width:90%"
+                                            v-model="formData.form.golongan_id"
+                                            label="Golongan - Keterangan"
+                                            :source="formData.golongans"
+                                            :option-label="(val)=> Object(val) === val && 'nama' in val ? `${val.nama} - ${val.keterangan}`:null"
+                                            :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
+                                            autocomplete="nama-keterangan"
+                                            @onEnter="formData.addGolongan"
+
+                                        />
+                                        <q-icon size="25px" name="help_outline" color="info" class="cursor-pointer">
+                                            <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                                                <strong>Untuk Masukkan data ?</strong> <br />
+                                                <em>Golongan - Keterangan</em><br />
+                                                <em>contoh : </em><br />
+                                                <strong>1/A - JURU MUDA</strong><br />
+                                                <em>Lalu tekan Enter </em>
+                                            </q-tooltip>
+                                        </q-icon>
+                                    </div>
+                                </div>
+                                <!-- Autocomplete Ruang -->
+                                <div class="col-md-4 col-xs-12">
+                                    Pilih Data Ruangan
+                                </div>
+                                <div class="col-md-8 col-xs-12">
+                                    <div class="flex items-center justify-between">
+                                        <app-autocomplete-new valid outlined
+                                            style="width:90%"
+                                            v-model="formData.form.ruangan_id"
+                                            label="Gedung - Lantai - Ruangan"
+                                            :source="formData.ruangans"
+                                            :option-label="(val)=> Object(val) === val && 'gedung' in val ? `${val.gedung} - ${val.lantai}- ${val.ruangan}`:null"
+                                            :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
+                                            autocomplete="gedung-lantai-ruangan"
+                                            @onEnter="formData.addRuangan"
+
+                                        />
+                                        <q-icon size="25px" name="help_outline" color="info" class="cursor-pointer">
+                                            <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                                                <strong>Untuk Menambah data ?</strong> <br />
+                                                <em>Gedung - Lantai - Ruangan</em><br />
+                                                <em>contoh : </em><br />
+                                                <strong>A-1-Mawar</strong><br />
+                                                <em>Lalu tekan Enter </em>
+                                            </q-tooltip>
+                                        </q-icon>
+                                    </div>
+                                </div>
+                                <!-- Autocomplete Bagian -->
+                                <div class="col-md-4 col-xs-12">
+                                    Pilih Data Bagian
+                                </div>
+                                <div class="col-md-8 col-xs-12">
+                                    <div class="flex items-center justify-between">
+                                        <app-autocomplete-new valid outlined
+                                            style="width:90%"
+                                            v-model="formData.form.bagian_id"
+                                            label="Bagian"
+                                            :source="formData.bagians"
+                                            :option-label="(val)=> Object(val) === val && 'nama' in val ? `${val.nama}`:null"
+                                            :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
+                                            autocomplete="nama"
+                                            @onEnter="formData.addBagian"
+
+                                        />
+                                        <q-icon size="25px" name="help_outline" color="info" class="cursor-pointer">
+                                            <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                                                <strong>Untuk Menambah data ?</strong> <br />
+                                                <em>Bagian</em><br />
+                                                <em>contoh : </em><br />
+                                                <strong>KEPEGAWAIAN</strong><br />
+                                                <em>Lalu tekan Enter </em>
+                                            </q-tooltip>
+                                        </q-icon>
+                                    </div>
+                                </div>
+                                <!-- {{formData.form.jurusan_id}} -->
+
+                                <q-banner class="bg-alert__info q-my-lg q-pa-md full-width">
+                                    <strong>INFORMASI</strong> <br />
+                                    <em> - klik <strong>Kirim ke list</strong> untuk simpan data pegawai mutasi berdasarkan no mutasi</em> <br />
+                                    <em> - klik <strong>Tambah Baru</strong> untuk masukkan data pegawai baru dan hapus seluruh form </em> <br />
+                                    <em> - klik <strong>kembali</strong> Kembali Ke step 1</em> <br />
+                                    <em> - klik <strong>Lanjut</strong> untuk menyelesaikan data surat mutasi</em> <br />
+                                </q-banner>
+                            </div>
+                            <q-separator />
                             <q-stepper-navigation>
-                                <q-btn @click="() => { step = 3 }" color="primary" label="Continue" />
-                                <q-btn flat @click="step = 1" color="primary" label="Back" class="q-ml-sm" />
+                                <div class="flex items-center justify-between">
+                                    <div class="left__place">
+                                        <app-btn :loading="formData.loading" color="secondary" type="submit" :label="formData.edited?'Simpan Perubahan': 'Kirim Ke list'"  />
+                                        <app-btn flat color="secondary" label="Kembali" @click="step = 1" class="q-ml-sm" />
+                                    </div>
+                                    <div class="right__place">
+                                        <app-btn color="secondary" label="Tambah Baru" @click="newData" class="q-mr-sm" />
+                                        <app-btn color="primary" label="Lanjut" @click="() => { step = 3 }"/>
+                                    </div>
+                                </div>
                             </q-stepper-navigation>
                         </q-form>
 
@@ -190,23 +328,26 @@
 
                     <q-step
                         :name="3"
-                        title="Create an ad"
+                        title="Selesai"
                         icon="add_comment"
                     >
-                        Try out different ad text to see what brings in the most customers, and learn how to
-                        enhance your ads using features like ad extensions. If you run into any problems with
-                        your ads, find out how to tell if they're running and how to resolve approval issues.
+                        <div class="flex column flex-center bg-grey-3" style="min-height:300px;">
+                            <q-icon name="done_all" size="40px" color="primary" />
+                            <div class="f-12 q-mt-md">Selesaikan Data Mutasi ini dengan mengklik Finish</div>
+                        </div>
 
                         <q-stepper-navigation>
-                        <q-btn color="primary"  label="Finish" />
-                        <q-btn flat @click="step = 2" color="primary" label="Back" class="q-ml-sm" />
+                            <app-btn :loading="formData.loading" color="primary" label="Finish" @click="formData.finishAdd"/>
+                            <q-btn flat @click="step = 2" color="primary" label="Kembali" class="q-ml-sm" />
                         </q-stepper-navigation>
                     </q-step>
 
                 </q-stepper>
             </div>
             <div class="col-md-5 col-xs-12">
-                untuk list tabel
+                <ListMutasiMasuk @edit="editData" @delete="deleteData"/>
+                <app-btn v-if="formData.details.length > 0" :loading="formData.loading" class="full-width q-mt-md"
+                color="primary" label="Simpan & Selesaikan Data Mutasi" @click="formData.finishAdd"/>
             </div>
         </div>
 <!-- add Pendidikan -->
@@ -238,17 +379,25 @@ import { useFormDetailMutasiStore } from 'src/stores/mutasi/formdetail'
 import { useFormStore } from 'src/stores/master/pendidikan/form'
 import * as kelompokMedis from 'src/stores/master/kelompokmedis/form'
 import { ref, onMounted } from 'vue'
+import ListMutasiMasuk from './ListMutasiMasuk.vue'
+// import { useQuasar } from 'quasar'
 
+// const $q = useQuasar()
 const formData = useFormDetailMutasiStore()
 const formPendidikan = useFormStore()
 const formKelMed = kelompokMedis.useFormStore()
 const step = ref(1)
 
 onMounted(() => {
+  formData.getHeader()
   formData.getProvinces()
   formData.setToday()
   formData.getAutocomplete()
   formData.getJurusans()
+  formData.getJabatans()
+  formData.getGolongans()
+  formData.getRuangans()
+  formData.getBagians()
 })
 
 const openPendidikan = ref(false)
@@ -264,12 +413,34 @@ function addKelMed () {
   })
 }
 
-function coba (val) {
-  console.log('input', val)
+function stepOneSubmit () {
+  if (!formData.edited) {
+    formData.cekData().then(() => {
+      step.value = 2
+    })
+  } else {
+    step.value = 2
+  }
 }
 
-function create (val) {
-  console.log('enter', val)
+function newData () {
+  formData.newData()
+    .then(() => {
+      step.value = 1
+    })
+}
+
+function editData (idx) {
+  formData.editData(idx)
+    .then(() => {
+      step.value = 1
+    })
+}
+
+function deleteData (i) {
+  const oldStep = step.value
+  formData.deleteList(i)
+  step.value = oldStep
 }
 </script>
 

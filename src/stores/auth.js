@@ -22,9 +22,10 @@ export const useAuthStore = defineStore('auth', {
 
   actions: {
     async login (payload) {
-      this.loading = true
+      // this.loading = true
       waitLoad('show')
       try {
+        // await axios.get('/sanctum/csrf-cookie')
         await api.post('/login', payload).then(async resp => {
           storage.setLocalToken(resp.data.token)
           storage.setUser(resp.data.user)

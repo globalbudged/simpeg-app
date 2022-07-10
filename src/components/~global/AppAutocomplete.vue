@@ -9,10 +9,9 @@
     hide-bottom-space
     no-error-icon
     @filter="filterFn"
-    :input-debounce="0"
+    :input-debounce="!filterred?500:0"
     @focus="getFocus"
     @input-value="setModel"
-    @update:model-value="(value)=> emits('change', value)"
     emit-value
     map-options
     use-input
@@ -25,7 +24,6 @@
     lazy-rules
     :rules="[anotherValid]"
     @new-value="createValue"
-    multiple
 >
     <template v-slot:no-option>
     <q-item>
@@ -39,7 +37,7 @@
 
 <script setup>
 import { ref } from 'vue'
-const emits = defineEmits(['getSource', 'setModel', 'change', 'create'])
+const emits = defineEmits(['getSource', 'setModel', 'onEnter', 'setSearch'])
 const props = defineProps({
   source: { type: Array, default: () => [] },
   label: { String: Array, default: 'Label' },
@@ -49,7 +47,8 @@ const props = defineProps({
   optionLabel: { String: Array, default: 'name' },
   filled: { type: Boolean, default: true },
   outlined: { type: Boolean, default: false },
-  valid: { type: Boolean, default: false }
+  valid: { type: Boolean, default: false },
+  filterred: { type: Boolean, default: true }
 })
 const refAuto = ref(null)
 const optionx = ref(props.source)
@@ -63,10 +62,20 @@ function getFocus () {
 function filterFn (val, update) {
   update(() => {
     if (val === '') {
-      optionx.value = props.source
+      if (!props.filterred) {
+        emits('setSearch', val)
+        optionx.value = props.source
+      } else {
+        optionx.value = props.source
+      }
     } else {
-      const needle = val.toLowerCase()
-      optionx.value = props.source.filter(v => v[refAuto.value.optionLabel].toLowerCase().indexOf(needle) > -1)
+      if (!props.filterred) {
+        emits('setSearch', val)
+        optionx.value = props.source
+      } else {
+        const needle = val.toLowerCase()
+        optionx.value = props.source.filter(v => v[refAuto.value.optionLabel].toLowerCase().indexOf(needle) > -1)
+      }
     }
   },
   ref => {
@@ -89,7 +98,10 @@ function anotherValid (val) {
 }
 
 function createValue (val, done) {
-  emits('create', val)
+  if (!props.filterred) {
+    emits('onEnter', val)
+    done(val)
+  }
 }
 </script>
 

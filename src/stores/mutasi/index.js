@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
 import { routerInstance } from 'src/boot/router'
-// import { notifErr } from 'src/modules/utils'
+import { notifErr } from 'src/modules/utils'
 // import { Dialog } from 'quasar'
 import { dbFormat } from 'src/modules/formatter'
 
@@ -58,8 +58,9 @@ export const useMutasiStore = defineStore('mutasi', {
           // })
         }).catch(error => {
           console.log(error.response)
-        // notifErr(error.response)
+          notifErr(error.response)
         })
     }
+
   }
 })

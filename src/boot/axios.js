@@ -7,10 +7,23 @@ import { getLocalToken } from 'src/modules/storage'
 const SERVER = process.env.API
 const API_VERSION_PREFIX = '/api/v1'
 
+// axios.defaults.withCredentials = true
+// axios.defaults.baseURL = SERVER
+
+// for api
+
 const api = axios.create(
-  { baseURL: SERVER + API_VERSION_PREFIX }
+  {
+    baseURL: SERVER + API_VERSION_PREFIX,
+    withCredentials: true
+  }
 )
+// api.defaults.headers.get.Accepts = 'application/json'
+// api.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+// api.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+
 api.defaults.headers.common.Authorization = `Bearer ${getLocalToken()}`
+
 export default boot(({ app }) => {
   app.config.globalProperties.$axios = axios
   app.config.globalProperties.$api = api

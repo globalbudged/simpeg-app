@@ -10,7 +10,8 @@
 
 const { configure } = require('quasar/wrappers')
 
-const API_SERVER = 'http://simpeg.test'
+// const API_SERVER = 'http://localhost/simpeg/public'
+const API_SERVER = 'https://servsimrs.udumbarainformatika.com/public'
 // const API = 'www'
 
 module.exports = configure(function (/* ctx */) {

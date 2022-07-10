@@ -81,8 +81,8 @@ const $q = useQuasar()
 // const router = useRouter()
 const myForm = ref(null)
 const form = ref({
-  email: 'pharyyady@gmail.com',
-  password: '141312',
+  email: 'fdgf@dsg.ghf',
+  password: '4363463',
   device_name: $q.platform.is.name + '-' + $q.platform.is.platform
 })
 // const loading = computed(() => st.state.loading)

@@ -93,11 +93,11 @@
                                                 @setModel="(value)=>store.setForm('tgl_mutasi', value)" label="Tanggal Mutasi"
                                             />
                                         </div>
-                                        <div class="col-md-4 col-xs-12">
+                                        <!-- <div class="col-md-4 col-xs-12">
                                             <app-input-date outlined :model="store.form.tgl_entry"
                                                 @setModel="(value)=>store.setForm('tgl_entry', value)" label="Tanggal Entry"
                                             />
-                                        </div>
+                                        </div> -->
                                         <div class="col-md-12 col-xs-12">
                                             <app-input v-model="store.form.no_surat" outlined label="Nomor Surat" />
                                         </div>
@@ -202,7 +202,6 @@ function onSubmit () {
   }
 
   store.saveData()
-  // router.replace({ name: 'mutasi.masuk', params: { slug: store.form.no_mutasi } })
 }
 </script>
 
