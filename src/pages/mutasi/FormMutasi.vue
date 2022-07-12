@@ -107,7 +107,7 @@
                             </q-card-section>
                             <q-card-section>
                                 <div class="text-right">
-                                    <app-btn type="submit" color="primary" label="Simpan & Lanjutkan"/>
+                                    <app-btn :loading="store.loading" type="submit" color="primary" label="Simpan & Lanjutkan"/>
                                 </div>
                             </q-card-section>
                         </q-card>
@@ -153,7 +153,7 @@ const showAddJenis = ref(false)
 
 onMounted(() => {
   store.getAutocomplete()
-  store.setToday()
+  store.resetFORM()
 })
 
 function saveDataJenis () {

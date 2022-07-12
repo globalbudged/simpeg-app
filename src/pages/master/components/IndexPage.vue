@@ -25,10 +25,11 @@
                     active-color="primary"
                 >
                 <q-tab v-for="(menu, i) in tabs" :key="i"
-                    class="my__tab" no-caps :name="menu.name"
-                    :label="store.wider?menu.name: null" :icon="menu.icon">
+                    class="my-tab" :name="menu.name" no-caps
+                    :label="store.wider?menu.name: null" :icon="menu.icon"
+                >
                     <q-tooltip v-if="!store.wider" class="bg-secondary" anchor="center right" self="center left" :offset="[5, 5]">
-                        <strong class="f-14">{{menu.name}}</strong> ...
+                        <strong class="f-14">{{menu.name}}</strong>
                         <!-- <em>right</em> -->
                         (<q-icon name="keyboard_arrow_right"/>)
                     </q-tooltip>
@@ -48,7 +49,10 @@
                     transition-next="jump-up"
                 >
                 <q-tab-panel v-for="(panel, idx) in tabs" :key="idx" :name="panel.name">
-                    <component :is="panel.comp"></component>
+                    <!-- <keep-alive> -->
+                        <component :is="panel.comp"></component>
+
+                    <!-- </keep-alive> -->
                 </q-tab-panel>
                 </q-tab-panels>
             </template>

@@ -6,12 +6,12 @@
                 enter-active-class="animated slideInDown "
                 leave-active-class="animated slideOutUp "
             >
-                <keep-alive>
-                <component
-                @pageActivated="hasActiveChildPage = true"
-                @pageDeactivated="hasActiveChildPage = false"
-                :is="Component"/>
-            </keep-alive>
+                <!-- <keep-alive> -->
+                    <component
+                        @pageActivated="hasActiveChildPage = true"
+                        @pageDeactivated="hasActiveChildPage = false"
+                    :is="Component"/>
+                <!-- </keep-alive> -->
             </transition>
         </router-view>
 

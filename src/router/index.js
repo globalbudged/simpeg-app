@@ -40,5 +40,9 @@ export default route(function (/* { ssrContext } */) {
     }
   })
 
+  Router.onError(error => {
+    console.log('router', error)
+  })
+
   return Router
 })

@@ -1,8 +1,24 @@
 import { Notify, Loading, QSpinnerCube } from 'quasar'
+import { routerInstance } from 'boot/router'
+import * as storage from 'src/modules/storage'
+
+const removeToken = () => {
+  storage.deleteLocalToken()
+  storage.deleteHeaderToken()
+  storage.deleteUser()
+  routerInstance.replace('/login')
+}
 
 const notifErr = (resp) => {
   const msg = resp ? resp.data.message : 'Ada Kesalahan, Harap ulamgi!'
-  const status = resp.status
+  const status = resp.status ? resp.status : 500
+
+  // unauthenticated
+  console.log('utility', resp)
+  if (resp.status === 401 && resp.data.message === 'Unauthenticated.') {
+    return removeToken()
+  }
+
   //   if (status === 200) {
 
   if (status === 422) {

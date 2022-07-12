@@ -1,44 +1,46 @@
 <template>
 <q-select
-    ref="refAuto"
-    :options="optionx"
-    :label="label"
+    ref="refAutoComplete"
     dense
-    :filled="!outlined?filled:!filled"
-    :outlined="outlined"
+    lazy-rules
     hide-bottom-space
     no-error-icon
-    @filter="filterFn"
-    :input-debounce="0"
     emit-value
     map-options
     use-input
+    clearable
+    behavior="menu"
+    :options="filterredOptions"
+    :label="label"
+    :filled="!outlined?filled:!filled"
+    :outlined="outlined"
+    :input-debounce="0"
     :option-value="optionValue"
     :option-label="optionLabel"
     :disable="disable"
     :loading="loading"
-    lazy-rules
+    @filter="filterFn"
     :rules="[anotherValid]"
     @new-value="createValue"
-    clearable
-    behavior="menu"
 
 >
     <template v-slot:no-option>
-    <q-item>
-        <q-item-section class="text-grey">
-        No results
-        </q-item-section>
-    </q-item>
+        <q-item>
+            <q-item-section class="text-grey">
+            Data tidak ditemukan
+            </q-item-section>
+        </q-item>
     </template>
 </q-select>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-const emits = defineEmits(['onEnter', 'getSource'])
+import { api } from 'boot/axios'
+
+const emits = defineEmits(['onEnter'])
+
 const props = defineProps({
-  source: { type: Array, default: () => [] },
   label: { type: String, default: 'Label' },
   endpoint: { type: String, default: '' },
   searchBy: { type: String, default: 'nama' },
@@ -51,35 +53,33 @@ const props = defineProps({
   valid: { type: Boolean, default: false }
 })
 
-const optionx = ref(null)
-const refAuto = ref(null)
+const options = ref(null)
+const refAutoComplete = ref(null)
 
-// async function fetchData () {
-//   const response = await api.get(`${props.endPoint}`)
-//   console.log(response)
-// }
+async function fetchData () {
+  const response = await api.get(`${props.endpoint}`)
+  const data = response.data.result
+  options.value = data
+}
 
-// fetchData()
-function filterFn (val, update) {
-  if (optionx.value !== null) {
-    // already loaded
-    update()
-    return
-  }
+fetchData()
+const filterredOptions = ref([])
+
+async function filterFn (val, update) {
   update(() => {
     if (val === '') {
-      optionx.value = props.source
+      filterredOptions.value = options.value
     } else {
       const needle = val.toLowerCase()
-      const arr = refAuto.value.autocomplete
+      const arr = refAutoComplete.value.autocomplete
       if (arr === '') {
-        optionx.value = props.source.filter(v => v.toLowerCase().indexOf(needle) > -1)
+        filterredOptions.value = options.value.filter(v => v.toLowerCase().indexOf(needle) > -1)
       } else {
         const splits = arr.split('-')
 
         const multiFilter = (data = [], filterKeys = [], value = '') => data.filter((item) => filterKeys.some(key => item[key].toString().toLowerCase().includes(value.toLowerCase()) && item[key]))
-        const filteredData = multiFilter(props.source, splits, needle)
-        optionx.value = filteredData
+        const filteredData = multiFilter(filterredOptions.value, splits, needle)
+        filterredOptions.value = filteredData
       }
     }
   },
@@ -93,17 +93,13 @@ function filterFn (val, update) {
   )
 }
 
-// function getFocus () {
-//   if (props.source.length === 0) {
-//     console.log('getData from server')
-//     emits('getSource')
-//     // optionx.value = props.source
-//   }
-// }
-
 function createValue (val, done) {
-  emits('onEnter', val)
-  done(val)
+  const result = new Promise((resolve) => emits('onEnter', val, resolve))
+
+  result.then((resp) => {
+    fetchData()
+    done(resp, 'add-unique')
+  })
 }
 
 function anotherValid (val) {
@@ -112,11 +108,6 @@ function anotherValid (val) {
   }
   return (val !== null && val !== '') || 'Harap diisi'
 }
-
-// watch(props.source, (obj) => {
-//   console.log('watch', obj)
-//   optionx.value = obj
-// })
 
 </script>
 

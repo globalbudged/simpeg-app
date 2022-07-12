@@ -9,7 +9,7 @@
                 </q-item-section>
             </q-item>
             <q-separator  class="bg-grey-3"/>
-            <div v-for="(item, i) in formData.details" :key="i">
+            <div v-for="(item, i) in props.items" :key="i">
                 <transition-group
                     appear
                     enter-active-class="animated slide-right"
@@ -23,15 +23,20 @@
                         </q-item-section>
 
                         <q-item-section>
-                        <q-item-label lines="1" class="text-weight-bold">{{item.pegawai.nama}}</q-item-label>
+                        <q-item-label lines="1" class="text-weight-bold">{{!item.pegawai? item.nama: item.pegawai.nama}}</q-item-label>
                         <q-item-label caption lines="2">
-                            <span class="f-11 text-white">Nip / Kode Pegawai: {{item.pegawai.nip}} <br />
-                            -- Nik  : {{item.pegawai.nik}} </span>
+                            <span class="f-11 text-white">Nip / Kode Pegawai: {{!item.pegawai? item.nip: item.pegawai.nip}} <br />
+                            -- Nik  : {{!item.pegawai?item.nik: item.pegawai.nik}} </span>
                         </q-item-label>
                         </q-item-section>
 
                         <q-item-section side>
-                            <q-icon class="text-white cursor-pointer" name="more_vert" >
+                            <q-spinner v-if="!item.pegawai"
+                                color="primary"
+                                size="3em"
+                                :thickness="5"
+                            />
+                            <q-icon v-else class="text-white cursor-pointer" name="more_vert" >
                                 <q-menu>
                                     <q-list dense style="min-width: 100px" @click="$emit('edit', i)">
                                         <q-item clickable v-close-popup>
@@ -54,6 +59,10 @@
 
 <script setup>
 import { useFormDetailMutasiStore } from 'src/stores/mutasi/formdetail'
+const props = defineProps({
+  items: { type: Array, default: () => [] },
+  temp: { type: Boolean, default: true }
+})
 
 const formData = useFormDetailMutasiStore()
 

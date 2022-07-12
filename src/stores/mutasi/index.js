@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
 import { routerInstance } from 'src/boot/router'
-import { notifErr } from 'src/modules/utils'
+import { notifErr, waitLoad } from 'src/modules/utils'
 // import { Dialog } from 'quasar'
 import { dbFormat } from 'src/modules/formatter'
 
@@ -28,13 +28,17 @@ export const useMutasiStore = defineStore('mutasi', {
 
   actions: {
     async getAutocomplete () {
+      waitLoad('show')
       await api.get('/autocomplete').then((resp) => {
         console.log(resp)
         const results = resp.data.result
         this.jenis_kepegawaian = results.jenis_kepegawaian
+
+        waitLoad('done')
       })
         .catch(error => {
           console.log(error)
+          waitLoad('done')
         })
     },
 
@@ -48,17 +52,32 @@ export const useMutasiStore = defineStore('mutasi', {
     setForm (name, val) {
       this.form[name] = val
     },
+    resetFORM () {
+      this.form = {}
+      const columns = ['kode_mutasi', 'no_mutasi', 'jenis_kepegawaian_id', 'no_surat', 'tgl_surat', 'tgl_mutasi', 'tgl_entry']
+      for (let i = 0; i < columns.length; i++) {
+        this.form[columns[i]] = ''
+      }
+      this.setToday()
+      this.setForm('jenis_kepegawaian_id', null)
+    },
     async saveData () {
+      this.loading = true
       await api.post('/mutasi/adding_data', this.form)
         .then((resp) => {
-          // console.log(resp)
-          routerInstance.replace({ name: 'mutasi.masuk', params: { slug: resp.data.result.uuid } })
-          // return new Promise((resolve, reject) => {
-          //   resolve(resp)
-          // })
+          if (this.form.kode_mutasi === 'MM') {
+            routerInstance.replace({ name: 'mutasi.masuk', params: { slug: resp.data.result.uuid } })
+          } else if (this.form.kode_mutasi === 'MK') {
+            routerInstance.replace({ name: 'mutasi.keluar', params: { slug: resp.data.result.uuid } })
+          } else {
+            routerInstance.replace({ name: 'mutasi.antar', params: { slug: resp.data.result.uuid } })
+          }
+          this.resetFORM()
+          this.loading = false
         }).catch(error => {
           console.log(error.response)
           notifErr(error.response)
+          this.loading = false
         })
     }
 

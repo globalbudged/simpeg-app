@@ -11,16 +11,27 @@ const routes = [
       { path: '/pendidikan', name: 'pendidikan', component: () => import('pages/master/pendidikan/IndexPage.vue') },
       {
         path: '/mutasi',
-        redirect: '/mutasi/set',
         component: () => import('pages/mutasi/IndexPage.vue'),
         children: [
           // { path: '', redirect: '/mutasi/set' },
-          { path: '/mutasi/set', name: 'mutasi.set', component: () => import('pages/mutasi/FormMutasi.vue') },
+          { path: '/mutasi', name: 'mutasi.set', component: () => import('pages/mutasi/FormMutasi.vue') },
           {
             path: '/mutasi/masuk/:slug',
             name: 'mutasi.masuk',
             meta: { backTo: 'mutasi' },
             component: () => import('pages/mutasi/MutasiMasuk.vue')
+          },
+          {
+            path: '/mutasi/keluar/:slug',
+            name: 'mutasi.keluar',
+            meta: { backTo: 'mutasi' },
+            component: () => import('pages/mutasi/MutasiKeluar.vue')
+          },
+          {
+            path: '/mutasi/antar_ruang/:slug',
+            name: 'mutasi.antar',
+            meta: { backTo: 'mutasi' },
+            component: () => import('pages/mutasi/MutasiAntar.vue')
           }
         ]
 

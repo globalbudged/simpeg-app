@@ -26,6 +26,10 @@ const props = defineProps({
     type: String,
     default: 'submit'
   },
+  to: {
+    type: String,
+    default: '/'
+  },
   color: {
     type: String,
     default: ''

@@ -98,7 +98,7 @@
                                 <em>Informasi ini Bersifat penting, isi secara detail form diatas. Inputan yang bertanda <strong>*</strong> Wajib diisi untuk yang lainnya Optional</em>
                             </q-banner>
                             <q-stepper-navigation class="text-right">
-                                <app-btn type="submit" color="primary" label="Lanjut" />
+                                <app-btn :loading="formData.loadingStepper" type="submit" color="primary" label="Lanjut" />
                             </q-stepper-navigation>
                         </q-form>
                     </q-step>
@@ -108,9 +108,8 @@
                         title="Keterangan Lainnya"
                         caption="Untuk Kelengkapan Data"
                         icon="create_new_folder"
-                        :done="step > 2"
                     >
-                        <q-form @submit="formData.sendToList">
+                        <q-form @submit="sendToList">
                             <div class="row q-col-gutter-md">
                                 <div class="col-md-12 f-14 text-bold">Data Pendidikan dan Kepegawaian</div>
 
@@ -163,14 +162,15 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-autocomplete-new valid outlined
+                                        <app-auto-complete-api
+                                            outlined
                                             style="width:90%"
-                                            v-model="formData.form.jurusan_id"
                                             label="Jurusan - Profesi"
-                                            :source="formData.jurusans"
-                                            :option-label="(val)=> Object(val) === val && 'nama' in val ? `${val.nama} - ${val.profesi}`:null"
-                                            :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
                                             autocomplete="nama-profesi"
+                                            v-model="formData.form.jurusan_id"
+                                            endpoint="/autocomplete_jurusans"
+                                            option-value="id"
+                                            :option-label="(val)=> Object(val) === val && 'nama' in val ? `${val.nama} - ${val.profesi}`:null"
                                             @onEnter="formData.addJurusan"
 
                                         />
@@ -193,14 +193,15 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-autocomplete-new valid outlined
+                                        <app-auto-complete-api
+                                            valid outlined
                                             style="width:90%"
-                                            v-model="formData.form.jabatan_id"
                                             label="Jabatan"
-                                            :source="formData.jabatans"
-                                            :option-label="(val)=> Object(val) === val && 'nama' in val ? `${val.nama}`:null"
-                                            :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
                                             autocomplete="nama"
+                                            endpoint="/autocomplete_jabatans"
+                                            option-value="id"
+                                            :optionLabel="val => Object(val) === val && 'nama' in val ? `${val.nama}`:null"
+                                            v-model="formData.form.jabatan_id"
                                             @onEnter="formData.addJabatan"
 
                                         />
@@ -221,14 +222,14 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-autocomplete-new valid outlined
+                                        <app-auto-complete-api valid outlined
                                             style="width:90%"
                                             v-model="formData.form.golongan_id"
                                             label="Golongan - Keterangan"
-                                            :source="formData.golongans"
+                                            endpoint="/autocomplete_golongans"
+                                            autocomplete="nama-keterangan"
                                             :option-label="(val)=> Object(val) === val && 'nama' in val ? `${val.nama} - ${val.keterangan}`:null"
                                             :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
-                                            autocomplete="nama-keterangan"
                                             @onEnter="formData.addGolongan"
 
                                         />
@@ -249,14 +250,15 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-autocomplete-new valid outlined
+                                        <app-auto-complete-api
+                                            outlined
                                             style="width:90%"
                                             v-model="formData.form.ruangan_id"
                                             label="Gedung - Lantai - Ruangan"
-                                            :source="formData.ruangans"
+                                            autocomplete="gedung-lantai-ruangan"
+                                            endpoint="/autocomplete_ruangans"
                                             :option-label="(val)=> Object(val) === val && 'gedung' in val ? `${val.gedung} - ${val.lantai}- ${val.ruangan}`:null"
                                             :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
-                                            autocomplete="gedung-lantai-ruangan"
                                             @onEnter="formData.addRuangan"
 
                                         />
@@ -277,14 +279,15 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-autocomplete-new valid outlined
+                                        <app-auto-complete-api
+                                            outlined
                                             style="width:90%"
                                             v-model="formData.form.bagian_id"
                                             label="Bagian"
-                                            :source="formData.bagians"
-                                            :option-label="(val)=> Object(val) === val && 'nama' in val ? `${val.nama}`:null"
-                                            :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
                                             autocomplete="nama"
+                                            endpoint="/autocomplete_bagians"
+                                            option-label="nama"
+                                            option-value="id"
                                             @onEnter="formData.addBagian"
 
                                         />
@@ -299,7 +302,22 @@
                                         </q-icon>
                                     </div>
                                 </div>
+                                <div class="col-md-4 col-xs-12">
+                                    Kode SKPD Sebelumnya
+                                </div>
+                                <div class="col-md-8 col-xs-12">
+                                    <app-input valid v-model="formData.form.kode_skpd_before" outlined label="kode skpd sebelumnya" />
+                                </div>
+                                <div class="col-md-4 col-xs-12">
+                                    nama SKPD Sebelumnya
+                                </div>
+                                <div class="col-md-8 col-xs-12">
+                                    <app-input valid v-model="formData.form.nama_skpd_before" outlined label="kode skpd sebelumnya" />
+                                </div>
                                 <!-- {{formData.form.jurusan_id}} -->
+                                <div class="col-12 text-right">
+                                    <app-btn :loading="formData.loading" color="secondary" type="submit" :label="formData.edited?`Simpan Perubahan`: `Kirim Ke list`"  />
+                                </div>
 
                                 <q-banner class="bg-alert__info q-my-lg q-pa-md full-width">
                                     <strong>INFORMASI</strong> <br />
@@ -313,12 +331,10 @@
                             <q-stepper-navigation>
                                 <div class="flex items-center justify-between">
                                     <div class="left__place">
-                                        <app-btn :loading="formData.loading" color="secondary" type="submit" :label="formData.edited?'Simpan Perubahan': 'Kirim Ke list'"  />
-                                        <app-btn flat color="secondary" label="Kembali" @click="step = 1" class="q-ml-sm" />
                                     </div>
                                     <div class="right__place">
-                                        <app-btn color="secondary" label="Tambah Baru" @click="newData" class="q-mr-sm" />
-                                        <app-btn color="primary" label="Lanjut" @click="() => { step = 3 }"/>
+                                        <app-btn flat color="secondary" label="Kembali" @click="step = 1" class="q-ml-sm" />
+                                        <app-btn color="primary" :label="labelBtnFinish" @click="formData.finishAdd"/>
                                     </div>
                                 </div>
                             </q-stepper-navigation>
@@ -326,28 +342,17 @@
 
                     </q-step>
 
-                    <q-step
-                        :name="3"
-                        title="Selesai"
-                        icon="add_comment"
-                    >
-                        <div class="flex column flex-center bg-grey-3" style="min-height:300px;">
-                            <q-icon name="done_all" size="40px" color="primary" />
-                            <div class="f-12 q-mt-md">Selesaikan Data Mutasi ini dengan mengklik Finish</div>
-                        </div>
-
-                        <q-stepper-navigation>
-                            <app-btn :loading="formData.loading" color="primary" label="Finish" @click="formData.finishAdd"/>
-                            <q-btn flat @click="step = 2" color="primary" label="Kembali" class="q-ml-sm" />
-                        </q-stepper-navigation>
-                    </q-step>
-
                 </q-stepper>
             </div>
             <div class="col-md-5 col-xs-12">
-                <ListMutasiMasuk @edit="editData" @delete="deleteData"/>
+                <ListMutasiMasuk
+                    :items="formData.details"
+                    :temp="formData.temp"
+                    @edit="editData"
+                    @delete="deleteData"
+                />
                 <app-btn v-if="formData.details.length > 0" :loading="formData.loading" class="full-width q-mt-md"
-                color="primary" label="Simpan & Selesaikan Data Mutasi" @click="formData.finishAdd"/>
+                color="primary" :label="labelBtnFinish" @click="formData.finishAdd"/>
             </div>
         </div>
 <!-- add Pendidikan -->
@@ -387,17 +392,11 @@ const formData = useFormDetailMutasiStore()
 const formPendidikan = useFormStore()
 const formKelMed = kelompokMedis.useFormStore()
 const step = ref(1)
+const labelBtnFinish = ref('kembali ke mutasi')
 
 onMounted(() => {
-  formData.getHeader()
-  formData.getProvinces()
-  formData.setToday()
-  formData.getAutocomplete()
-  formData.getJurusans()
-  formData.getJabatans()
-  formData.getGolongans()
-  formData.getRuangans()
-  formData.getBagians()
+//   console.log($q.loadingBar)
+  formData.task()
 })
 
 const openPendidikan = ref(false)
@@ -423,11 +422,10 @@ function stepOneSubmit () {
   }
 }
 
-function newData () {
-  formData.newData()
-    .then(() => {
-      step.value = 1
-    })
+function sendToList () {
+  formData.sendToList().then(() => {
+    step.value = 1
+  })
 }
 
 function editData (idx) {
