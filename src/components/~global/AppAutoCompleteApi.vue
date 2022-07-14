@@ -5,6 +5,7 @@
     lazy-rules
     hide-bottom-space
     no-error-icon
+    @filter="filterFn"
     emit-value
     map-options
     use-input
@@ -19,7 +20,6 @@
     :option-label="optionLabel"
     :disable="disable"
     :loading="loading"
-    @filter="filterFn"
     :rules="[anotherValid]"
     @new-value="createValue"
 
@@ -60,6 +60,7 @@ async function fetchData () {
   const response = await api.get(`${props.endpoint}`)
   const data = response.data.result
   options.value = data
+  // console.log(refAutoComplete.value)
 }
 
 fetchData()

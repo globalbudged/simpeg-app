@@ -1,87 +1,89 @@
 <template>
 <q-select
     ref="refAuto"
+    dense
     :options="optionx"
     :label="label"
-    dense
     :filled="!outlined?filled:!filled"
     :outlined="outlined"
     hide-bottom-space
     no-error-icon
     @filter="filterFn"
-    :input-debounce="0"
-    emit-value
-    map-options
     use-input
-    :option-value="optionValue"
     :option-label="optionLabel"
+    :option-value="optionValue"
     :disable="disable"
     :loading="loading"
     lazy-rules
     :rules="[anotherValid]"
     @new-value="createValue"
-    clearable
     behavior="menu"
+    clearable
+    map-options
+    emit-value
 
 >
     <template v-slot:no-option>
-    <q-item>
-        <q-item-section class="text-grey">
-        No results
-        </q-item-section>
-    </q-item>
+      <q-item>
+          <q-item-section class="text-grey">
+          No results
+          </q-item-section>
+      </q-item>
+
     </template>
 </q-select>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-const emits = defineEmits(['onEnter', 'getSource'])
+const emits = defineEmits(['onEnter', 'getSource', 'setModel'])
 const props = defineProps({
   source: { type: Array, default: () => [] },
   label: { type: String, default: 'Label' },
-  endpoint: { type: String, default: '' },
   searchBy: { type: String, default: 'nama' },
   disable: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
-  optionValue: { Array: String, default: 'name' },
-  optionLabel: { Array: String, default: 'name' },
+  optionValue: { Object: String, default: 'id' },
+  optionLabel: { Object: String, default: 'nama' },
   filled: { type: Boolean, default: true },
   outlined: { type: Boolean, default: false },
   valid: { type: Boolean, default: false }
 })
 
-const optionx = ref(null)
+const optionx = ref([])
 const refAuto = ref(null)
 
-// async function fetchData () {
-//   const response = await api.get(`${props.endPoint}`)
-//   console.log(response)
-// }
+function fetchData () {
+  console.log(refAuto.value)
+  if (props.source.length > 0) {
+    optionx.value = props.source
+  }
+}
+fetchData()
 
-// fetchData()
 function filterFn (val, update) {
-  if (optionx.value !== null) {
-    // already loaded
-    update()
+  if (val === '') {
+    update(() => {
+      optionx.value = props.source
+    })
     return
   }
   update(() => {
-    if (val === '') {
-      optionx.value = props.source
+    // if (val === '') {
+    //   optionx.value = props.source
+    // } else {
+    const needle = val.toLowerCase()
+    const arr = refAuto.value.autocomplete
+    if (arr === '') {
+      optionx.value = props.source.filter(v => v.toLowerCase().indexOf(needle) > -1)
     } else {
-      const needle = val.toLowerCase()
-      const arr = refAuto.value.autocomplete
-      if (arr === '') {
-        optionx.value = props.source.filter(v => v.toLowerCase().indexOf(needle) > -1)
-      } else {
-        const splits = arr.split('-')
+      const splits = arr.split('-')
 
-        const multiFilter = (data = [], filterKeys = [], value = '') => data.filter((item) => filterKeys.some(key => item[key].toString().toLowerCase().includes(value.toLowerCase()) && item[key]))
-        const filteredData = multiFilter(props.source, splits, needle)
-        optionx.value = filteredData
-      }
+      const multiFilter = (data = [], filterKeys = [], value = '') => data.filter((item) => filterKeys.some(key => item[key].toString().toLowerCase().includes(value.toLowerCase()) && item[key]))
+      const filteredData = multiFilter(props.source, splits, needle)
+      optionx.value = filteredData
     }
+    // }
   },
   ref => {
     // console.log(ref)
@@ -93,6 +95,10 @@ function filterFn (val, update) {
   )
 }
 
+// function setDisplay (val) {
+//   return val
+// }
+
 // function getFocus () {
 //   if (props.source.length === 0) {
 //     console.log('getData from server')
@@ -102,8 +108,12 @@ function filterFn (val, update) {
 // }
 
 function createValue (val, done) {
-  emits('onEnter', val)
-  done(val)
+  const result = new Promise((resolve) => emits('onEnter', val, resolve))
+
+  result.then((resp) => {
+    fetchData()
+    done(resp, 'toggle')
+  })
 }
 
 function anotherValid (val) {
@@ -113,7 +123,7 @@ function anotherValid (val) {
   return (val !== null && val !== '') || 'Harap diisi'
 }
 
-// watch(props.source, (obj) => {
+// watch(() => props.source, (obj) => {
 //   console.log('watch', obj)
 //   optionx.value = obj
 // })

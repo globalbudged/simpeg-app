@@ -162,18 +162,44 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-auto-complete-api
+                                        <app-autocomplete-new
+                                            v-model="formData.form.jurusan_id"
                                             outlined
                                             style="width:90%"
                                             label="Jurusan - Profesi"
                                             autocomplete="nama-profesi"
-                                            v-model="formData.form.jurusan_id"
-                                            endpoint="/autocomplete_jurusans"
                                             option-value="id"
-                                            :option-label="(val)=> Object(val) === val && 'nama' in val ? `${val.nama} - ${val.profesi}`:null"
+                                            :optionLabel="val => Object(val) === val && 'nama' in val ? `${val.nama} - ${val.profesi}`:null"
+                                            :source="formData.jurusans"
+                                            @setModel="(val)=>formData.setForm('jurusan_id', val)"
                                             @onEnter="formData.addJurusan"
 
                                         />
+                                        <!-- <q-select
+                                            outlined
+                                            dense
+                                            label="Jurusan-Profesi"
+                                            v-model="formData.form.jurusan_id"
+                                            :options="formData.optJurusans"
+                                            option-value="id"
+                                            :option-label="opt => Object(opt) === opt && 'nama' in opt ? `${opt.nama} - ${opt.profesi}` : null"
+                                            emit-value
+                                            map-options
+                                            use-input
+                                            behavior="menu"
+                                            @filter="formData.filterJurusans"
+                                            style="width: 90%"
+                                        >
+                                            <template v-slot:no-option>
+                                                <q-item>
+                                                    <q-item-section class="text-grey">
+                                                    No results
+                                                    </q-item-section>
+                                                </q-item>
+                                            </template>
+                                        </q-select> -->
+
+                                        <!-- {{formData.form.jurusan_id}} -->
                                         <q-icon size="25px" name="help_outline" color="info" class="cursor-pointer">
                                             <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
                                                 <strong>Untuk Masukkan data ?</strong> <br />
@@ -193,15 +219,15 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-auto-complete-api
+                                        <app-autocomplete-new
                                             valid outlined
                                             style="width:90%"
                                             label="Jabatan"
                                             autocomplete="nama"
-                                            endpoint="/autocomplete_jabatans"
+                                            v-model="formData.form.jabatan_id"
+                                            :source="formData.jabatans"
                                             option-value="id"
                                             :optionLabel="val => Object(val) === val && 'nama' in val ? `${val.nama}`:null"
-                                            v-model="formData.form.jabatan_id"
                                             @onEnter="formData.addJabatan"
 
                                         />
@@ -222,11 +248,12 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-auto-complete-api valid outlined
+                                        <app-autocomplete-new
+                                            valid outlined
                                             style="width:90%"
                                             v-model="formData.form.golongan_id"
                                             label="Golongan - Keterangan"
-                                            endpoint="/autocomplete_golongans"
+                                            :source="formData.golongans"
                                             autocomplete="nama-keterangan"
                                             :option-label="(val)=> Object(val) === val && 'nama' in val ? `${val.nama} - ${val.keterangan}`:null"
                                             :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
@@ -250,13 +277,13 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-auto-complete-api
+                                        <app-autocomplete-new
                                             outlined
                                             style="width:90%"
                                             v-model="formData.form.ruangan_id"
                                             label="Gedung - Lantai - Ruangan"
                                             autocomplete="gedung-lantai-ruangan"
-                                            endpoint="/autocomplete_ruangans"
+                                            :source="formData.ruangans"
                                             :option-label="(val)=> Object(val) === val && 'gedung' in val ? `${val.gedung} - ${val.lantai}- ${val.ruangan}`:null"
                                             :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
                                             @onEnter="formData.addRuangan"
@@ -279,13 +306,13 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-auto-complete-api
+                                        <app-autocomplete-new
                                             outlined
                                             style="width:90%"
                                             v-model="formData.form.bagian_id"
                                             label="Bagian"
                                             autocomplete="nama"
-                                            endpoint="/autocomplete_bagians"
+                                            :source="formData.bagians"
                                             option-label="nama"
                                             option-value="id"
                                             @onEnter="formData.addBagian"

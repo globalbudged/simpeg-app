@@ -31,7 +31,7 @@
                         </q-item-section>
 
                         <q-item-section side>
-                            <q-spinner v-if="!item.pegawai"
+                            <q-spinner v-if="!item.pegawai || item.isEdited"
                                 color="primary"
                                 size="3em"
                                 :thickness="5"

@@ -18,7 +18,12 @@ export const useMutasiStore = defineStore('mutasi', {
       no_surat: '',
       tgl_surat: '',
       tgl_mutasi: '',
-      tgl_entry: ''
+      tgl_phk: '',
+      dasar_phk: '',
+      jenis_phk: '',
+      dasar: '',
+      kepada: '',
+      untuk: ''
     }
   }),
 
@@ -47,7 +52,7 @@ export const useMutasiStore = defineStore('mutasi', {
       const formatDb = dbFormat(date)
       this.setForm('tgl_surat', formatDb)
       this.setForm('tgl_mutasi', formatDb)
-      this.setForm('tgl_entry', formatDb)
+      this.setForm('tgl_phk', formatDb)
     },
     setForm (name, val) {
       this.form[name] = val
@@ -72,8 +77,8 @@ export const useMutasiStore = defineStore('mutasi', {
           } else {
             routerInstance.replace({ name: 'mutasi.antar', params: { slug: resp.data.result.uuid } })
           }
-          this.resetFORM()
           this.loading = false
+          this.resetFORM()
         }).catch(error => {
           console.log(error.response)
           notifErr(error.response)

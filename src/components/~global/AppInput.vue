@@ -9,7 +9,6 @@
       no-error-icon
       lazy-rules
       :rules="[anotherValid]"
-      :validator="validator"
       :type="typeInput"
       :autocomplete="type==='password'?'off':'on'"
       :error="error"

@@ -61,6 +61,7 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
       kelompokMedis: []
     },
     jurusans: [],
+    optJurusans: [],
     jabatans: [],
     golongans: [],
     ruangans: [],
@@ -79,14 +80,14 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
     async task () {
       waitLoad('show')
       await this.getHeader()
-      await this.getAutocomplete()
-      // await this.getJurusans()
-      // await this.getJabatans()
-      // await this.getGolongans()
-      // await this.getRuangans()
-      // await this.getBagians()
-      this.setToday()
       waitLoad('done')
+      this.getAutocomplete()
+      this.getJurusans()
+      this.getJabatans()
+      await this.getGolongans()
+      await this.getRuangans()
+      await this.getBagians()
+      this.setToday()
       this.getProvinces()
     },
     async getHeader () {
@@ -303,6 +304,7 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
       this.edited = true
       this.index = idx
       const val = this.details[idx]
+      val.isEdited = true
       const keys = Object.keys(val)
       keys.forEach((key, index) => {
         this.setForm(key, val[key])
@@ -314,11 +316,21 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
         this.setForm(ky, pegawai[ky])
       })
 
-      console.log('edit', pegawai)
+      const mustNumber = ['bagian_id', 'ruangan_id', 'golongan_id', 'jabatan_id', 'jurusan_id', 'kategori_id', 'pendidikan_id']
+      mustNumber.forEach((key, index) => {
+        if (this.form[key] !== null) {
+          this.setForm(key, parseInt(this.form[key]))
+        }
+      })
+      console.log('edit', this.form)
       this.isOpen = !this.isOpen
       return new Promise((resolve, reject) => {
         resolve()
       })
+    },
+
+    isNumber (x) {
+      return parseFloat(x) === x
     },
 
     // ================================================================AUTOCOMPLETE
@@ -336,7 +348,52 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
         })
     },
     // ================================================================        AUTOCOMPLETE =================== JURUSAN
+    async getJurusans (payload) {
+      console.log(payload)
+      const search =
+        typeof payload !== 'undefined' || payload != null ? payload : ''
+      const params = {
+        params: {
+          q: search
+        }
+      }
+      await api.get('/autocomplete_jurusans', params).then((resp) => {
+        console.log('jurusans', resp)
+        this.jurusans = []
+        this.jurusans = resp.data.result
+        // this.optJurusans = this.jurusans
+      })
+    },
+    filterJurusans (val, update) {
+      console.log(val)
+      update(() => {
+        if (val === '') {
+          this.optJurusans = this.jurusans
+        } else {
+          const needle = val.toLowerCase()
 
+          const arr = ['nama', 'profesi']
+          if (arr === []) {
+            this.optJurusans = this.jurusans.filter(
+              (v) => v.toLowerCase().indexOf(needle) > -1
+            )
+          } else {
+            const multiFilter = (data = [], filterKeys = [], value = '') =>
+              data.filter((item) =>
+                filterKeys.some(
+                  (key) =>
+                    item[key]
+                      .toString()
+                      .toLowerCase()
+                      .includes(value.toLowerCase()) && item[key]
+                )
+              )
+            const filteredData = multiFilter(this.jurusans, arr, needle)
+            this.optJurusans = filteredData
+          }
+        }
+      })
+    },
     addJurusan (val, resolve) {
       const str = val.toUpperCase()
       const splits = str.split('-')
@@ -362,6 +419,7 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
         .onOk(async () => {
           await api.post('/jurusan/adding_data', params).then((resp) => {
             console.log(resp)
+            this.getJurusans()
             this.form.jurusan_id = resp.data.result.id
             resolve(resp.data.result.id)
           })
@@ -371,7 +429,21 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
         })
     },
     // ================================================================        AUTOCOMPLETE =================== JABATAN
-
+    async getJabatans (payload) {
+      console.log(payload)
+      const search =
+        typeof payload !== 'undefined' || payload != null ? payload : ''
+      const params = {
+        params: {
+          q: search
+        }
+      }
+      await api.get('/autocomplete_jabatans', params).then((resp) => {
+        console.log('jabatans', resp)
+        this.jabatans = []
+        this.jabatans = resp.data.result
+      })
+    },
     addJabatan (val, resolve) {
       console.log('add', val)
       const str = val.toUpperCase()
@@ -390,6 +462,7 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
         .onOk(async () => {
           await api.post('/jabatan/adding_data', params).then((resp) => {
             console.log(resp)
+            this.getJabatans()
             this.form.jabatan_id = resp.data.result.id
             resolve(resp.data.result.id)
           })
@@ -399,20 +472,20 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
         })
     },
     // ================================================================        AUTOCOMPLETE =================== JABATAN
-    // async getGolongans (payload) {
-    //   console.log(payload)
-    //   const search = typeof payload !== 'undefined' || payload != null ? payload : ''
-    //   const params = {
-    //     params: {
-    //       q: search
-    //     }
-    //   }
-    //   await api.get('/autocomplete_golongans', params).then(resp => {
-    //     console.log('golongan', resp)
-    //     this.golongans = []
-    //     this.golongans = resp.data.result
-    //   })
-    // },
+    async getGolongans (payload) {
+      console.log(payload)
+      const search = typeof payload !== 'undefined' || payload != null ? payload : ''
+      const params = {
+        params: {
+          q: search
+        }
+      }
+      await api.get('/autocomplete_golongans', params).then(resp => {
+        console.log('golongan', resp)
+        this.golongans = []
+        this.golongans = resp.data.result
+      })
+    },
 
     addGolongan (val, resolve) {
       const str = val.toUpperCase()
@@ -441,6 +514,7 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
         .onOk(async () => {
           await api.post('/golongan/adding_data', params).then((resp) => {
             console.log(resp)
+            this.getGolongans()
             this.form.golongan_id = resp.data.result.id
             resolve(resp.data.result.id)
           })
@@ -450,20 +524,20 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
         })
     },
     // ================================================================        AUTOCOMPLETE =================== RUANGAN
-    // async getRuangans (payload) {
-    //   console.log(payload)
-    //   const search = typeof payload !== 'undefined' || payload != null ? payload : ''
-    //   const params = {
-    //     params: {
-    //       q: search
-    //     }
-    //   }
-    //   await api.get('/autocomplete_ruangans', params).then(resp => {
-    //     console.log('ruangan', resp)
-    //     this.ruangans = []
-    //     this.ruangans = resp.data.result
-    //   })
-    // },
+    async getRuangans (payload) {
+      console.log(payload)
+      const search = typeof payload !== 'undefined' || payload != null ? payload : ''
+      const params = {
+        params: {
+          q: search
+        }
+      }
+      await api.get('/autocomplete_ruangans', params).then(resp => {
+        console.log('ruangan', resp)
+        this.ruangans = []
+        this.ruangans = resp.data.result
+      })
+    },
 
     addRuangan (val, resolve) {
       const str = val.toUpperCase()
@@ -495,6 +569,7 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
         .onOk(async () => {
           await api.post('/ruangan/adding_data', params).then((resp) => {
             console.log(resp)
+            this.getRuangans()
             this.form.ruangan_id = resp.data.result.id
             resolve(resp.data.result.id)
           })
@@ -504,20 +579,20 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
         })
     },
     // ================================================================        AUTOCOMPLETE =================== BAGIAN
-    // async getBagians (payload) {
-    //   console.log(payload)
-    //   const search = typeof payload !== 'undefined' || payload != null ? payload : ''
-    //   const params = {
-    //     params: {
-    //       q: search
-    //     }
-    //   }
-    //   await api.get('/autocomplete_bagians', params).then(resp => {
-    //     console.log('bagian', resp)
-    //     this.bagians = []
-    //     this.bagians = resp.data.result
-    //   })
-    // },
+    async getBagians (payload) {
+      console.log(payload)
+      const search = typeof payload !== 'undefined' || payload != null ? payload : ''
+      const params = {
+        params: {
+          q: search
+        }
+      }
+      await api.get('/autocomplete_bagians', params).then(resp => {
+        console.log('bagian', resp)
+        this.bagians = []
+        this.bagians = resp.data.result
+      })
+    },
 
     addBagian (val, resolve) {
       const str = val.toUpperCase()
@@ -538,6 +613,7 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
         .onOk(async () => {
           await api.post('/bagian/adding_data', params).then((resp) => {
             console.log(resp)
+            this.getBagians()
             this.form.bagian_id = resp.data.result.id
             resolve(resp.data.result.id)
           })
@@ -567,8 +643,10 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
         return notifErrVue('Hei, Data Nik Atau Nip Belum Ada!')
       }
       return new Promise((resolve, reject) => {
-        this.setUnshiftDetails(this.form)
-        const form = this.details[0]
+        if (!this.form.isEdited) {
+          this.setUnshiftDetails(this.form)
+        }
+        const form = this.form
         this.saveNewList(form)
         this.newData().then(() => {
           resolve()
@@ -636,7 +714,7 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
             })
         })
         .onCancel(() => {
-          console.log('Cancel')
+          this.details[idx].isEdited = false
         })
     },
 

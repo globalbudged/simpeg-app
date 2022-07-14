@@ -1,6 +1,5 @@
 <template>
     <div>
-        <q-form @submit="onSubmit">
             <div class="bg-page q-pa-lg">
                 <div class="row q-my-md">
                     <div class="col-md-5 col-xs-12">
@@ -72,6 +71,8 @@
                 </div>
                 <q-separator />
                 <!-- pilih jenis kepegawaian -->
+
+        <q-form @submit="onSubmit">
                 <div class="row q-my-md">
                     <div class="col-md-5 col-xs-12 q-pr-md">
                         <div class="f-16 text-bold q-mb-sm">Tanggal & Nomor Surat</div>
@@ -84,8 +85,11 @@
                                 <div class="q-mt-sm">
                                     <div class="row q-col-gutter-sm">
                                         <div class="col-md-4 col-xs-12">
-                                            <app-input-date outlined :model="store.form.tgl_surat"
+                                            <app-input-date v-if="store.form.kode_mutasi=='MM' && store.form.jenis_kepegawaian_id==1" outlined :model="store.form.tgl_surat"
                                                 @setModel="(value)=>store.setForm('tgl_surat', value)" label="Tanggal Surat"
+                                            />
+                                            <app-input-date v-else outlined :model="store.form.tgl_phk"
+                                                @setModel="(value)=>store.setForm('tgl_phk', value)" label="Tanggal PHK"
                                             />
                                         </div>
                                         <div class="col-md-4 col-xs-12">
@@ -93,14 +97,41 @@
                                                 @setModel="(value)=>store.setForm('tgl_mutasi', value)" label="Tanggal Mutasi"
                                             />
                                         </div>
-                                        <!-- <div class="col-md-4 col-xs-12">
-                                            <app-input-date outlined :model="store.form.tgl_entry"
-                                                @setModel="(value)=>store.setForm('tgl_entry', value)" label="Tanggal Entry"
-                                            />
-                                        </div> -->
-                                        <div class="col-md-12 col-xs-12">
+                                        <div class="col-md-4 col-xs-12">
                                             <app-input v-model="store.form.no_surat" outlined label="Nomor Surat" />
                                         </div>
+                                        <div class="col-md-4 col-xs-12">
+                                            <app-input v-model="store.form.dasar" outlined label="Dasar" />
+                                        </div>
+                                        <!-- <div v-if="store.form.kode_mutasi=='MK' && store.form.jenis_kepegawaian_id==3" class="col-md-12 col-xs-12">
+                                            <app-input
+                                                :valid="store.form.kode_mutasi!=='MK' && store.form.jenis_kepegawaian_id!==3"
+                                                v-model="store.form.no_surat"
+                                                outlined label="Dasar PHK" />
+                                        </div>
+                                        <div v-if="store.form.kode_mutasi=='MK' && store.form.jenis_kepegawaian_id==3" class="col-md-12 col-xs-12">
+                                            <q-radio v-model="store.form.jenis_phk" unchecked-icon="panorama_fish_eye"
+                                            checked-icon="task_alt" :val="1" label="Mengundurkan Diri" color="primary" />
+                                            <q-radio v-model="store.form.jenis_phk" unchecked-icon="panorama_fish_eye"
+                                            checked-icon="task_alt" :val="2" label="diberhentikan" color="primary" />
+                                        </div> -->
+                                        <!-- <div v-if="store.form.kode_mutasi === 'MAR'" class="col-md-4 col-xs-12">
+                                            <app-input
+                                                v-model="store.form.dasar"
+                                                outlined label="Dasar" />
+                                        </div> -->
+                                        <!-- <div v-if="store.form.kode_mutasi=='MAR'"  class="col-md-4 col-xs-12">
+                                            <app-input
+                                                :valid="store.form.kode_mutasi === 'MAR' ? false: true"
+                                                v-model="store.form.kepada"
+                                                outlined label="Kepada" />
+                                        </div>
+                                        <div v-if="store.form.kode_mutasi=='MAR'"  class="col-md-4 col-xs-12">
+                                            <app-input
+                                                :valid="store.form.kode_mutasi === 'MAR' ? false: true"
+                                                v-model="store.form.untuk"
+                                                outlined label="Untuk" />
+                                        </div> -->
                                     </div>
 
                                 </div>
@@ -114,9 +145,9 @@
 
                     </div>
                 </div>
-            </div>
 
         </q-form>
+            </div>
 
         <!-- add jenis kepegawaian -->
         <AppDialogInput
