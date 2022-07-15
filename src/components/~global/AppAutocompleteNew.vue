@@ -54,7 +54,7 @@ const optionx = ref([])
 const refAuto = ref(null)
 
 function fetchData () {
-  console.log(refAuto.value)
+  // console.log(refAuto.value)
   if (props.source.length > 0) {
     optionx.value = props.source
   }

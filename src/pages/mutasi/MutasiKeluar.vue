@@ -75,7 +75,7 @@
                                     <div>NIP : <strong>{{model.nip}}</strong>  </div>
                                     <div>NIK : <strong>{{model.nik}}</strong>  </div>
                                     <div class="q-mt-sm">
-                                        <q-chip color="red" text-color="white" icon="local_hospital">{{model.kategori.nama}}</q-chip>
+                                        <q-chip v-if="model.kategori" color="red" text-color="white" icon="local_hospital">{{model.kategori?model.kategori.nama:''}}</q-chip>
                                         <q-chip color="info" text-color="white" icon="sell">{{model.jenis.nama}} - {{model.jenis.kelompok}}</q-chip>
                                     </div>
                                 </div>
@@ -180,8 +180,8 @@ async function filterOptions (val, update) {
 
   const params = {
     params: {
-      q: val
-    //   jenis_kepegawaian_id: store.form.jenis_kepegawaian_id
+      q: val,
+      jenis_kepegawaian_id: store.form.jenis_kepegawaian_id
     }
   }
   const resp = await api.get('/pegawai/search', params)

@@ -2,41 +2,35 @@
     <div class="bg-page q-pa-lg">
         <div class="row q-col-gutter-md">
             <div class="col-md-7 col-xs-12">
-                <q-stepper
-                    v-model="step"
-                    ref="stepper"
-                    color="primary"
-                    animated
-                >
-                    <q-step
-                        :name="1"
-                        title="Data Diri"
-                        icon="person"
-                        :done="step > 1"
-                    >
+                <q-stepper v-model="step" ref="stepper" color="primary" animated>
+                    <q-step :name="1" title="Data Diri" icon="person" :done="step > 1">
                         <q-form @submit="stepOneSubmit">
                             <div class="row q-col-gutter-md">
                                 <div class="col-md-12 f-14 text-bold">Data Diri</div>
                                 <div class="col-md-12 col-xs-12">
-                                    <app-input v-model="formData.form.nama" icon="person" label="Nama Lengkap *" outlined />
+                                    <app-input v-model="formData.form.nama" icon="person" label="Nama Lengkap *"
+                                        outlined />
                                 </div>
                                 <div class="col-md-6 col-xs-12">
-                                    <app-input v-model="formData.form.nik" icon="pin" label="Masukkan NIK *" outlined/>
+                                    <app-input v-model="formData.form.nik" icon="pin" label="Masukkan NIK *" outlined />
                                 </div>
                                 <div class="col-md-6 col-xs-12">
-                                    <app-input v-model="formData.form.nip" icon="pin" label="Masukkan NIP / Kode Pegawai *" outlined/>
+                                    <app-input v-model="formData.form.nip" icon="pin"
+                                        label="Masukkan NIP / Kode Pegawai *" outlined />
                                 </div>
                                 <div class="col-md-4 col-xs-12">
-                                    <app-input-date valid :model="formData.form.tanggal_lahir"
-                                    icon="event" label="Tanggal Lahir" @setModel="(val)=>formData.setForm('tanggal_lahir', val)"
-                                    outlined/>
+                                    <app-input-date valid :model="formData.form.tanggal_lahir" icon="event"
+                                        label="Tanggal Lahir" @setModel="(val)=>formData.setForm('tanggal_lahir', val)"
+                                        outlined />
                                 </div>
 
                                 <div class="col-md-5 col-xs-12">
-                                    <app-input valid v-model="formData.form.tempat_lahir" icon="place" label="Tempat Lahir" outlined/>
+                                    <app-input valid v-model="formData.form.tempat_lahir" icon="place"
+                                        label="Tempat Lahir" outlined />
                                 </div>
                                 <div class="col-md-6 col-sm-12 q-gutter-sm">
-                                    <app-input valid v-model="formData.form.contact" icon="phone" label="No Handphone" outlined/>
+                                    <app-input valid v-model="formData.form.contact" icon="phone" label="No Handphone"
+                                        outlined />
                                 </div>
                                 <div class="col-md-6 col-sm-12 q-gutter-sm">
                                     <q-radio size="sm" v-model="formData.form.gender" val="L" label="Laki-laki" />
@@ -44,50 +38,34 @@
                                 </div>
                                 <div class="col-md-12 f-14 text-bold">Alamat Tempat Tinggal</div>
                                 <div class="col-md-12 col-xs-12">
-                                    <app-input valid v-model="formData.form.alamat" icon="place" label="Alamat" outlined />
+                                    <app-input valid v-model="formData.form.alamat" icon="place" label="Alamat"
+                                        outlined />
                                 </div>
                                 <div class="col-md-4 col-sm-12">
-                                    <app-autocomplete
-                                        valid outlined
-                                        v-model="formData.form.provinsi"
-                                        label="Provinsi"
-                                        :source="formData.provinces"
-                                        @getSource="formData.getProvinces"
-                                        @setModel="(val)=> {formData.setForm('provinsi', val), formData.getKota(val)}"
-                                    />
+                                    <app-autocomplete valid outlined v-model="formData.form.provinsi" label="Provinsi"
+                                        :source="formData.provinces" @getSource="formData.getProvinces"
+                                        @setModel="(val)=> {formData.setForm('provinsi', val), formData.getKota(val)}" />
                                 </div>
                                 <div class="col-md-4 col-sm-12">
-                                    <app-autocomplete valid outlined
-                                        v-model="formData.form.kabkot"
-                                        label="Kabupaten /Kota"
-                                        :source="formData.kotas"
-                                        @getSource="formData.getKota"
+                                    <app-autocomplete valid outlined v-model="formData.form.kabkot"
+                                        label="Kabupaten /Kota" :source="formData.kotas" @getSource="formData.getKota"
                                         @setModel="(val)=>{formData.setForm('kabkot', val), formData.getKec(val)}"
                                         :disable="formData.form.provinsi==='' || formData.form.provinsi === null"
-                                        :loading="formData.loadingSelect"
-                                    />
+                                        :loading="formData.loadingSelect" />
                                 </div>
                                 <div class="col-md-4 col-sm-12">
-                                    <app-autocomplete valid outlined
-                                        v-model="formData.form.kecamatan"
-                                        label="Kecamatan"
-                                        :source="formData.kecs"
-                                        @getSource="formData.getKec"
+                                    <app-autocomplete valid outlined v-model="formData.form.kecamatan" label="Kecamatan"
+                                        :source="formData.kecs" @getSource="formData.getKec"
                                         @setModel="(val)=>{formData.setForm('kecamatan', val), formData.getKels(val)}"
                                         :disable="formData.form.kabkot==='' || formData.form.kabkot === null"
-                                        :loading="formData.loadingSelect"
-                                    />
+                                        :loading="formData.loadingSelect" />
                                 </div>
                                 <div class="col-md-4 col-sm-12">
-                                    <app-autocomplete valid outlined
-                                        v-model="formData.form.kelurahan"
-                                        label="Kelurahan"
-                                        :source="formData.kels"
-                                        @getSource="formData.getKels"
+                                    <app-autocomplete valid outlined v-model="formData.form.kelurahan" label="Kelurahan"
+                                        :source="formData.kels" @getSource="formData.getKels"
                                         @setModel="(val)=>{formData.setForm('kelurahan', val)}"
                                         :disable="formData.form.kecamatan==='' || formData.form.kecamatan === null"
-                                        :loading="formData.loadingSelect"
-                                    />
+                                        :loading="formData.loadingSelect" />
                                 </div>
                                 <div class="col-md-4 col-xs-12">
                                     <app-input valid v-model="formData.form.kodepos" label="Kodepos" outlined />
@@ -95,23 +73,32 @@
                             </div>
                             <q-banner class="bg-alert__info q-mt-md">
                                 <strong>INFORMASI</strong> <br />
-                                <em>Informasi ini Bersifat penting, isi secara detail form diatas. Inputan yang bertanda <strong>*</strong> Wajib diisi untuk yang lainnya Optional</em>
+                                <em>Informasi ini Bersifat penting, isi secara detail form diatas. Inputan yang bertanda
+                                    <strong>*</strong> Wajib diisi untuk yang lainnya Optional</em>
                             </q-banner>
                             <q-stepper-navigation class="text-right">
-                                <app-btn :loading="formData.loadingStepper" type="submit" color="primary" label="Lanjut" />
+                                <app-btn :loading="formData.loadingStepper" type="submit" color="primary"
+                                    label="Lanjut" />
                             </q-stepper-navigation>
                         </q-form>
                     </q-step>
 
-                    <q-step
-                        :name="2"
-                        title="Keterangan Lainnya"
-                        caption="Untuk Kelengkapan Data"
-                        icon="create_new_folder"
-                    >
+                    <q-step :name="2" title="Keterangan Lainnya" caption="Untuk Kelengkapan Data"
+                        icon="create_new_folder">
                         <q-form @submit="sendToList">
                             <div class="row q-col-gutter-md">
-                                <div class="col-md-12 f-14 text-bold">Data Pendidikan dan Kepegawaian</div>
+                                <div class="col-md-12 col-xs-12">
+                                    <div class="flex items-center justify-between">
+                                        <div class="f-14 text-bold">Data Pendidikan dan Kepegawaian</div>
+                                        <div class="">
+                                            <q-chip color="red" text-color="white" icon="bookmark" size="sm">
+                                                kelompok {{formData.jenis_kepegawaian?
+                                                formData.jenis_kepegawaian.kelompok: ''}} /
+                                                {{formData.jenis_kepegawaian? formData.jenis_kepegawaian.nama: ''}}
+                                            </q-chip>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <!-- PILIHAN PENDIDIKAN -->
                                 <div class="col-md-5 col-xs-12">
@@ -119,19 +106,18 @@
                                 </div>
                                 <div class="col-md-7 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-input v-if="formData.autocompletes.pendidikans.length < 1" outlined readonly
-                                        icon="sentiment_dissatisfied" class="cursor-pointer" label="Pilihan Pendidikan Belum Ada"
-                                        style="width:90%"
-                                        />
+                                        <app-input v-if="formData.autocompletes.pendidikans.length < 1" outlined
+                                            readonly icon="sentiment_dissatisfied" class="cursor-pointer"
+                                            label="Pilihan Pendidikan Belum Ada" style="width:90%" />
 
                                         <q-list v-else bordered class="q-pa-xs rounded-borders" style="width:90%">
-                                            <q-radio  v-for="(pend, idx) in formData.autocompletes.pendidikans" :key="idx"
-                                                v-model="formData.form.pendidikan_id" size="xs"
+                                            <q-radio v-for="(pend, idx) in formData.autocompletes.pendidikans"
+                                                :key="idx" v-model="formData.form.pendidikan_id" size="xs"
                                                 checked-icon="task_alt" unchecked-icon="panorama_fish_eye"
-                                                :val="pend.id" :label="`${pend.nama}`"
-                                            />
+                                                :val="pend.id" :label="`${pend.nama}`" />
                                         </q-list>
-                                        <q-btn size="sm" icon="add" flat round  @click="openPendidikan = !openPendidikan"/>
+                                        <q-btn size="sm" icon="add" flat round
+                                            @click="openPendidikan = !openPendidikan" />
                                     </div>
                                 </div>
                                 <!-- PILIHAN KEL MEDIS -->
@@ -140,19 +126,17 @@
                                 </div>
                                 <div class="col-md-7 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-input v-if="formData.autocompletes.kelompokMedis.length < 1" outlined readonly
-                                        icon="sentiment_dissatisfied" class="cursor-pointer" label="Pilihan Kelompok Medis Belum Ada"
-                                        style="width:90%"
-                                        />
+                                        <app-input v-if="formData.autocompletes.kelompokMedis.length < 1" outlined
+                                            readonly icon="sentiment_dissatisfied" class="cursor-pointer"
+                                            label="Pilihan Kelompok Medis Belum Ada" style="width:90%" />
 
                                         <q-list v-else bordered class="q-pa-xs rounded-borders" style="width:90%">
-                                            <q-radio  v-for="(kat, i) in formData.autocompletes.kelompokMedis" :key="i"
-                                                v-model="formData.form.kategori_id" size="xs"
-                                                checked-icon="task_alt" unchecked-icon="panorama_fish_eye"
-                                                :val="kat.id" :label="`${kat.nama}`"
-                                            />
+                                            <q-radio v-for="(kat, i) in formData.autocompletes.kelompokMedis" :key="i"
+                                                v-model="formData.form.kategori_id" size="xs" checked-icon="task_alt"
+                                                unchecked-icon="panorama_fish_eye" :val="kat.id"
+                                                :label="`${kat.nama}`" />
                                         </q-list>
-                                        <q-btn size="sm" icon="add" flat round  @click="openKelMed = !openKelMed"/>
+                                        <q-btn size="sm" icon="add" flat round @click="openKelMed = !openKelMed" />
                                     </div>
                                 </div>
 
@@ -162,19 +146,13 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-autocomplete-new
-                                            v-model="formData.form.jurusan_id"
-                                            outlined
-                                            style="width:90%"
-                                            label="Jurusan - Profesi"
-                                            autocomplete="nama-profesi"
+                                        <app-autocomplete-new v-model="formData.form.jurusan_id" outlined
+                                            style="width:90%" label="Jurusan - Profesi" autocomplete="nama-profesi"
                                             option-value="id"
                                             :optionLabel="val => Object(val) === val && 'nama' in val ? `${val.nama} - ${val.profesi}`:null"
                                             :source="formData.jurusans"
                                             @setModel="(val)=>formData.setForm('jurusan_id', val)"
-                                            @onEnter="formData.addJurusan"
-
-                                        />
+                                            @onEnter="formData.addJurusan" />
                                         <!-- <q-select
                                             outlined
                                             dense
@@ -219,18 +197,11 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-autocomplete-new
-                                            valid outlined
-                                            style="width:90%"
-                                            label="Jabatan"
-                                            autocomplete="nama"
-                                            v-model="formData.form.jabatan_id"
-                                            :source="formData.jabatans"
-                                            option-value="id"
+                                        <app-autocomplete-new valid outlined style="width:90%" label="Jabatan"
+                                            autocomplete="nama" v-model="formData.form.jabatan_id"
+                                            :source="formData.jabatans" option-value="id"
                                             :optionLabel="val => Object(val) === val && 'nama' in val ? `${val.nama}`:null"
-                                            @onEnter="formData.addJabatan"
-
-                                        />
+                                            @onEnter="formData.addJabatan" />
                                         <q-icon size="25px" name="help_outline" color="info" class="cursor-pointer">
                                             <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
                                                 <strong>Untuk Masukkan data ?</strong> <br />
@@ -248,18 +219,12 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-autocomplete-new
-                                            valid outlined
-                                            style="width:90%"
-                                            v-model="formData.form.golongan_id"
-                                            label="Golongan - Keterangan"
-                                            :source="formData.golongans"
-                                            autocomplete="nama-keterangan"
+                                        <app-autocomplete-new valid outlined style="width:90%"
+                                            v-model="formData.form.golongan_id" label="Golongan - Keterangan"
+                                            :source="formData.golongans" autocomplete="nama-keterangan"
                                             :option-label="(val)=> Object(val) === val && 'nama' in val ? `${val.nama} - ${val.keterangan}`:null"
                                             :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
-                                            @onEnter="formData.addGolongan"
-
-                                        />
+                                            @onEnter="formData.addGolongan" />
                                         <q-icon size="25px" name="help_outline" color="info" class="cursor-pointer">
                                             <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
                                                 <strong>Untuk Masukkan data ?</strong> <br />
@@ -277,18 +242,12 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-autocomplete-new
-                                            outlined
-                                            style="width:90%"
-                                            v-model="formData.form.ruangan_id"
-                                            label="Gedung - Lantai - Ruangan"
-                                            autocomplete="gedung-lantai-ruangan"
-                                            :source="formData.ruangans"
+                                        <app-autocomplete-new outlined style="width:90%"
+                                            v-model="formData.form.ruangan_id" label="Gedung - Lantai - Ruangan"
+                                            autocomplete="gedung-lantai-ruangan" :source="formData.ruangans"
                                             :option-label="(val)=> Object(val) === val && 'gedung' in val ? `${val.gedung} - ${val.lantai}- ${val.ruangan}`:null"
                                             :option-value="opt => Object(opt) === opt && 'id' in opt ? opt.id : null"
-                                            @onEnter="formData.addRuangan"
-
-                                        />
+                                            @onEnter="formData.addRuangan" />
                                         <q-icon size="25px" name="help_outline" color="info" class="cursor-pointer">
                                             <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
                                                 <strong>Untuk Menambah data ?</strong> <br />
@@ -306,18 +265,10 @@
                                 </div>
                                 <div class="col-md-8 col-xs-12">
                                     <div class="flex items-center justify-between">
-                                        <app-autocomplete-new
-                                            outlined
-                                            style="width:90%"
-                                            v-model="formData.form.bagian_id"
-                                            label="Bagian"
-                                            autocomplete="nama"
-                                            :source="formData.bagians"
-                                            option-label="nama"
-                                            option-value="id"
-                                            @onEnter="formData.addBagian"
-
-                                        />
+                                        <app-autocomplete-new outlined style="width:90%"
+                                            v-model="formData.form.bagian_id" label="Bagian" autocomplete="nama"
+                                            :source="formData.bagians" option-label="nama" option-value="id"
+                                            @onEnter="formData.addBagian" />
                                         <q-icon size="25px" name="help_outline" color="info" class="cursor-pointer">
                                             <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
                                                 <strong>Untuk Menambah data ?</strong> <br />
@@ -333,25 +284,31 @@
                                     Kode SKPD Sebelumnya
                                 </div>
                                 <div class="col-md-8 col-xs-12">
-                                    <app-input valid v-model="formData.form.kode_skpd_before" outlined label="kode skpd sebelumnya" />
+                                    <app-input valid v-model="formData.form.kode_skpd_before" outlined
+                                        label="kode skpd sebelumnya" />
                                 </div>
                                 <div class="col-md-4 col-xs-12">
                                     nama SKPD Sebelumnya
                                 </div>
                                 <div class="col-md-8 col-xs-12">
-                                    <app-input valid v-model="formData.form.nama_skpd_before" outlined label="kode skpd sebelumnya" />
+                                    <app-input valid v-model="formData.form.nama_skpd_before" outlined
+                                        label="kode skpd sebelumnya" />
                                 </div>
                                 <!-- {{formData.form.jurusan_id}} -->
                                 <div class="col-12 text-right">
-                                    <app-btn :loading="formData.loading" color="secondary" type="submit" :label="formData.edited?`Simpan Perubahan`: `Kirim Ke list`"  />
+                                    <app-btn :loading="formData.loading" color="secondary" type="submit"
+                                        :label="formData.edited?`Simpan Perubahan`: `Kirim Ke list`" />
                                 </div>
 
                                 <q-banner class="bg-alert__info q-my-lg q-pa-md full-width">
                                     <strong>INFORMASI</strong> <br />
-                                    <em> - klik <strong>Kirim ke list</strong> untuk simpan data pegawai mutasi berdasarkan no mutasi</em> <br />
-                                    <em> - klik <strong>Tambah Baru</strong> untuk masukkan data pegawai baru dan hapus seluruh form </em> <br />
+                                    <em> - klik <strong>Kirim ke list</strong> untuk simpan data pegawai mutasi
+                                        berdasarkan no mutasi</em> <br />
+                                    <em> - klik <strong>Tambah Baru</strong> untuk masukkan data pegawai baru dan hapus
+                                        seluruh form </em> <br />
                                     <em> - klik <strong>kembali</strong> Kembali Ke step 1</em> <br />
-                                    <em> - klik <strong>Lanjut</strong> untuk menyelesaikan data surat mutasi</em> <br />
+                                    <em> - klik <strong>Lanjut</strong> untuk menyelesaikan data surat mutasi</em>
+                                    <br />
                                 </q-banner>
                             </div>
                             <q-separator />
@@ -360,8 +317,9 @@
                                     <div class="left__place">
                                     </div>
                                     <div class="right__place">
-                                        <app-btn flat color="secondary" label="Kembali" @click="step = 1" class="q-ml-sm" />
-                                        <app-btn color="primary" :label="labelBtnFinish" @click="formData.finishAdd"/>
+                                        <app-btn flat color="secondary" label="Kembali" @click="step = 1"
+                                            class="q-ml-sm" />
+                                        <app-btn color="primary" :label="labelBtnFinish" @click="formData.finishAdd" />
                                     </div>
                                 </div>
                             </q-stepper-navigation>
@@ -372,33 +330,21 @@
                 </q-stepper>
             </div>
             <div class="col-md-5 col-xs-12">
-                <ListMutasiMasuk
-                    :items="formData.details"
-                    :temp="formData.temp"
-                    @edit="editData"
-                    @delete="deleteData"
-                />
+                <ListMutasiMasuk :items="formData.details" :temp="formData.temp" @edit="editData"
+                    @delete="deleteData" />
                 <app-btn v-if="formData.details.length > 0" :loading="formData.loading" class="full-width q-mt-md"
-                color="primary" :label="labelBtnFinish" @click="formData.finishAdd"/>
+                    color="primary" :label="labelBtnFinish" @click="formData.finishAdd" />
             </div>
         </div>
-<!-- add Pendidikan -->
-        <AppDialogInput
-            v-model="openPendidikan"
-                @onSubmit="addPendidikan"
-                :loading="formPendidikan.loading"
-        >
+        <!-- add Pendidikan -->
+        <AppDialogInput v-model="openPendidikan" @onSubmit="addPendidikan" :loading="formPendidikan.loading">
             <div class="q-col-gutter-sm">
                 <app-input v-model="formPendidikan.form.nama" label="Pendidikan (Contoh: SD)" />
                 <app-input valid v-model="formPendidikan.form.keterangan" label="Keterangan (Contoh: Sekolah Dasar)" />
             </div>
         </AppDialogInput>
-<!-- add kelompok medis -->
-        <AppDialogInput
-            v-model="openKelMed"
-                @onSubmit="addKelMed"
-                :loading="formKelMed.loading"
-        >
+        <!-- add kelompok medis -->
+        <AppDialogInput v-model="openKelMed" @onSubmit="addKelMed" :loading="formKelMed.loading">
             <div class="q-col-gutter-sm">
                 <app-input v-model="formKelMed.form.nama" label="Pendidikan (Contoh: NON MEDIS)" />
             </div>

@@ -10,6 +10,7 @@ export const useMutasiStore = defineStore('mutasi', {
     loading: false,
     mutations: [{ kode: 'MM', nama: 'Mutasi Masuk' }, { kode: 'MK', nama: 'Mutasi Keluar' }, { kode: 'MAR', nama: 'Mutasi Antar Ruang' }],
     jenis_kepegawaian: [],
+    jenis_phks: [],
 
     form: {
       kode_mutasi: '',
@@ -38,7 +39,9 @@ export const useMutasiStore = defineStore('mutasi', {
         console.log(resp)
         const results = resp.data.result
         this.jenis_kepegawaian = results.jenis_kepegawaian
+        this.jenis_phks = results.jenis_phks
 
+        this.resetFORM()
         waitLoad('done')
       })
         .catch(error => {
@@ -59,7 +62,9 @@ export const useMutasiStore = defineStore('mutasi', {
     },
     resetFORM () {
       this.form = {}
-      const columns = ['kode_mutasi', 'no_mutasi', 'jenis_kepegawaian_id', 'no_surat', 'tgl_surat', 'tgl_mutasi', 'tgl_entry']
+      const columns = ['kode_mutasi', 'no_mutasi', 'jenis_kepegawaian_id', 'no_surat', 'tgl_surat', 'tgl_mutasi', 'tgl_entry',
+        'tgl_phk', 'dasar_phk', 'jenis_phk', 'dasar', 'kepada', 'untuk'
+      ]
       for (let i = 0; i < columns.length; i++) {
         this.form[columns[i]] = ''
       }
@@ -78,7 +83,6 @@ export const useMutasiStore = defineStore('mutasi', {
             routerInstance.replace({ name: 'mutasi.antar', params: { slug: resp.data.result.uuid } })
           }
           this.loading = false
-          this.resetFORM()
         }).catch(error => {
           console.log(error.response)
           notifErr(error.response)

@@ -71,7 +71,9 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
     temp: true,
     slug: '',
     index: 0,
-    loadingStepper: false
+    loadingStepper: false,
+
+    jenis_kepegawaian: null
   }),
 
   getters: {},
@@ -100,6 +102,7 @@ export const useFormDetailMutasiStore = defineStore('formdetail', {
           this.form.mutation_id = resp.data.result.id
           this.form.no_mutasi = resp.data.result.no_mutasi
           this.form.no_surat = resp.data.result.no_surat
+          this.jenis_kepegawaian = resp.data.result.jenis_kepegawaian
           this.setDetails(resp.data.result.mutasi_details)
         })
         .catch((err) => {

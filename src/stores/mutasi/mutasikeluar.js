@@ -7,7 +7,6 @@ import { Dialog } from 'quasar'
 
 export const useMutasiKeluarStore = defineStore('mutasikeluar', {
   state: () => ({
-    isOpen: false,
     form: {
       no_mutasi: '',
       no_surat: '',
