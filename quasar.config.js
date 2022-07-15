@@ -33,7 +33,7 @@ module.exports = configure(function (/* ctx */) {
     // https://v2.quasar.dev/quasar-cli/boot-files
     boot: [
 
-      'global-components', 'router'
+      'global-components', 'router', 'apexcharts'
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css

@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 import { api } from 'boot/axios'
 import { routerInstance } from 'src/boot/router'
-import { waitLoad, notifSuccess } from 'src/modules/utils'
+import { waitLoad, notifSuccess, notifErrVue } from 'src/modules/utils'
 // import { useAuthStore } from './auth'
 import { Dialog } from 'quasar'
 
-export const useMutasiKeluarStore = defineStore('mutasikeluar', {
+export const useMarStore = defineStore('mar', {
   state: () => ({
     form: {
       no_mutasi: '',
@@ -65,6 +65,11 @@ export const useMutasiKeluarStore = defineStore('mutasikeluar', {
     },
 
     async sendToList (payload) {
+      const find = this.details.filter(x => x.pegawai.id === payload.id)
+      console.log('find', find)
+      if (find.length > 0) {
+        return notifErrVue('Hei, NIK ini sudah ada di list!')
+      }
       this.setUnshiftDetails(payload)
       return new Promise((resolve, reject) => {
         const form = this.details[0]
@@ -100,7 +105,7 @@ export const useMutasiKeluarStore = defineStore('mutasikeluar', {
         .onOk(async () => {
           const params = { id: this.details[idx].id }
           await api
-            .post('/mutasidetail/del_mutasi_keluar', params)
+            .post('/mutasidetail/del_mutasi_antar', params)
             .then((resp) => {
               console.log(resp)
               notifSuccess(resp)
