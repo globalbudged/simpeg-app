@@ -19,7 +19,6 @@
         >
             <template v-slot:form>
                 <app-input :autofocus="false" v-model="formData.form.nama" label="Kelompok Medis, , (contoh: NON MEDIS)" class="q-mb-sm"/>
-                <app-input valid v-model="formData.form.flag" label="Masukkan flag (Optional)" />
             </template>
             <template v-slot:letter-icon="{row}">
               <div class="text-capitalize">{{row.nama.slice(0,1)}}</div>

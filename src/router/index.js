@@ -34,7 +34,7 @@ export default route(function (/* { ssrContext } */) {
     if (to.matched.some(record => record.meta.requireAuth) && !LocalStorage.getItem('token')) {
       next({ path: '/login' })
     } else if (!to.matched.some(record => record.meta.requireAuth) && LocalStorage.getItem('token')) {
-      next({ path: '/dashboard' })
+      next({ path: '/' })
     } else {
       next()
     }

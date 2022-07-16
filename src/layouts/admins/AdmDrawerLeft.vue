@@ -48,9 +48,7 @@ const links = ref([
     nama: 'Master Controls',
     links: [
       { icon: 'people', nama: 'Data Pegawai', url: '/pegawai' },
-      { icon: 'leaderboard', nama: 'Data Pendidikan', url: '/pendidikan' },
-      { icon: 'layers', nama: 'Komponen Master', url: '/components' },
-      { icon: 'list_alt', nama: 'Data mboh', url: '/' }
+      { icon: 'layers', nama: 'Komponen Master', url: '/components' }
     ]
   }
 ])

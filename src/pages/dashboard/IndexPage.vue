@@ -49,6 +49,38 @@
                             </div>
                         </q-card>
                     </div>
+                    <div class="col-md-6 col-xs-12">
+                        <q-card class="bg-info text-white">
+                            <div class="q-pa-md">
+                                <div class="column">
+                                    <div class="flex items-center justify-between">
+                                        <q-icon name="badge" size="60px" />
+                                        <div>
+                                            <div class="text-h4 text-weight-light">{{asn}}</div>
+                                        </div>
+                                    </div>
+                                    <q-separator class="bg-white q-my-md" />
+                                    <div class="text-h5 text-weight-light text-right">ASN</div>
+                                </div>
+                            </div>
+                        </q-card>
+                    </div>
+                    <div class="col-md-6 col-xs-12">
+                        <q-card class="bg-orange text-white">
+                            <div class="q-pa-md">
+                                <div class="column">
+                                    <div class="flex items-center justify-between">
+                                        <q-icon name="account_circle" size="60px" />
+                                        <div>
+                                            <div class="text-h4 text-weight-light">{{nonasn}}</div>
+                                        </div>
+                                    </div>
+                                    <q-separator class="bg-white q-my-md" />
+                                    <div class="text-h5 text-weight-light text-right">NON ASN</div>
+                                </div>
+                            </div>
+                        </q-card>
+                    </div>
                 </div>
             </div>
 
@@ -66,9 +98,9 @@
                             </q-item-section>
 
                             <q-item-section>
-                                <q-item-label lines="1">Activity App?</q-item-label>
+                                <q-item-label lines="1">{{item.name}}</q-item-label>
                                 <q-item-label caption lines="2">
-                                    <span class="text-weight-bold">{{item.name}}</span>
+                                    <span class="text-weight-bold"></span>
                                     -- {{item.activity}}
                                 </q-item-label>
                             </q-item-section>
@@ -108,6 +140,8 @@ const chartOptions = ref({
 
 const stillActive = ref(0)
 const lastOut = ref(0)
+const asn = ref(0)
+const nonasn = ref(0)
 const logs = ref([])
 
 onMounted(() => {
@@ -117,11 +151,12 @@ onMounted(() => {
 
 async function getPegawai () {
   await api.get('/dashboard').then((resp) => {
-    stillActive.value = resp.data[1]
-    lastOut.value = resp.data[0]
-    const arr = Object.values(resp.data)
+    console.log(resp)
+    stillActive.value = resp.data.total_active
+    lastOut.value = resp.data.total_keluar
+    asn.value = resp.data.asn
+    nonasn.value = resp.data.honorer
     series.value = [stillActive.value, lastOut.value]
-    console.log(arr)
   })
 }
 async function getLogs () {

@@ -3,9 +3,9 @@
         <div class="box__login bg-grey-2 shadow-4">
             <div class="relative-position">
                 <div class="q-pa-lg">
-                    <div class="text-h3 text-bold text-white">SIMPEG</div>
+                    <div class="text-h3 text-bold text-white">SIMRS</div>
                     <div class="text-caption text-white">Sistem Informasi Management</div>
-                    <div class="text-caption text-white mt--5"> Kepegawaian</div>
+                    <div class="text-caption text-white mt--5"> Rumah Sakit</div>
 
                     <!-- box login -->
                     <div class="box__form bg-white q-mt-lg q-pa-md">
@@ -54,11 +54,11 @@
                         <q-separator />
                         <div class="q-my-md">
                             <div class="text-grey-8">
-                                Aplikasi SIMPEG Sistem Informasi Kepegawaian ini
+                                Aplikasi SIMRS ini
                                 tidak di perjualbelikan secara bebas tanpa seizin dari pembuatnya.
                             </div>
                             <div class="q-mt-lg text-right f-14 text-grey-8">
-                                SIMPEG Versi 1.0
+                                SIMPEG Versi BETA
                             </div>
                         </div>
                     </div>

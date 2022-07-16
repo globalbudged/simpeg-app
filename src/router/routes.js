@@ -2,9 +2,18 @@
 const routes = [
   {
     path: '/',
+    component: () => import('layouts/LoginLayout.vue'),
+    meta: { requireAuth: true },
+    children: [
+      { path: '', redirect: '/home' },
+      { path: '/home', name: 'home', component: () => import('pages/IndexPage.vue') }
+    ]
+  },
+  {
+    path: '/dashboard',
     component: () => import('layouts/admins/MainLayout.vue'),
     children: [
-      { path: '', redirect: '/dashboard' },
+      // { path: '', redirect: '/dashboard' },
       { path: '/dashboard', name: 'dashboard', component: () => import('pages/dashboard/IndexPage.vue') },
       { path: '/pegawai', name: 'pegawai', component: () => import('pages/master/pegawai/IndexPage.vue') },
       { path: '/components', name: 'components', component: () => import('pages/master/components/IndexPage.vue') },
